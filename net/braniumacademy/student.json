@@ -1,0 +1,244 @@
+[
+  {
+    "person_id": "01234567890",
+    "full_name": {
+      "first": "Ngọc",
+      "mid": "Văn",
+      "last": "Nguyễn"
+    },
+    "birth_date": {
+      "day": 10,
+      "month": 3,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Xuân Phương",
+      "district": "Nam Từ Liêm",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1001",
+    "email": "minhngoc@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.25
+  },
+  {
+    "person_id": "01234567891",
+    "full_name": {
+      "first": "Linh",
+      "mid": "Thị Mỹ",
+      "last": "Đỗ"
+    },
+    "birth_date": {
+      "day": 23,
+      "month": 6,
+      "year": 2006
+    },
+    "address": {
+      "wards": "Minh Khai",
+      "district": "Bắc Từ Liêm",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1002",
+    "email": "linhlinhdo@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.75
+  },
+  {
+    "person_id": "01234567892",
+    "full_name": {
+      "first": "Khánh",
+      "mid": "Ngọc",
+      "last": "Nguyễn"
+    },
+    "birth_date": {
+      "day": 21,
+      "month": 1,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Cổ Nhuế",
+      "district": "Bắc Từ Liêm",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1003",
+    "email": "khanhngocnguyen@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.45
+  },
+  {
+    "person_id": "01234567893",
+    "full_name": {
+      "first": "Tuấn",
+      "mid": "Công",
+      "last": "Lê"
+    },
+    "birth_date": {
+      "day": 30,
+      "month": 9,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Bách Khoa",
+      "district": "Hai Bà Trưng",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1004",
+    "email": "congtuanle@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.15
+  },
+  {
+    "person_id": "01234567894",
+    "full_name": {
+      "first": "Tuấn",
+      "mid": "Thanh",
+      "last": "Hoàng"
+    },
+    "birth_date": {
+      "day": 27,
+      "month": 7,
+      "year": 2004
+    },
+    "address": {
+      "wards": "Bách Khoa",
+      "district": "Hai Bà Trưng",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1005",
+    "email": "thanhtuanhoang@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.55
+  },
+  {
+    "person_id": "01234567895",
+    "full_name": {
+      "first": "Liên",
+      "mid": "Kim",
+      "last": "Phùng"
+    },
+    "birth_date": {
+      "day": 16,
+      "month": 3,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Liễu Giai",
+      "district": "Ba Đình",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1006",
+    "email": "kimlienp@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.45
+  },
+  {
+    "person_id": "01234567896",
+    "full_name": {
+      "first": "Duy",
+      "mid": "Quang",
+      "last": "Đỗ"
+    },
+    "birth_date": {
+      "day": 5,
+      "month": 5,
+      "year": 2006
+    },
+    "address": {
+      "wards": "Ao Sen",
+      "district": "Hà Đông",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1007",
+    "email": "quangduydeptrai@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.65
+  },
+  {
+    "person_id": "01234567897",
+    "full_name": {
+      "first": "Mai",
+      "mid": "Thị Như",
+      "last": "Phạm"
+    },
+    "birth_date": {
+      "day": 23,
+      "month": 9,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Mai Dịch",
+      "district": "Cầu Giấy",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1008",
+    "email": "nhumaipham@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.45
+  },
+  {
+    "person_id": "01234567898",
+    "full_name": {
+      "first": "Như",
+      "mid": "Thị Quỳnh",
+      "last": "Lê"
+    },
+    "birth_date": {
+      "day": 18,
+      "month": 8,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Thanh Chương",
+      "district": "Tây Hồ",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1009",
+    "email": "quynhnhule@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.95
+  },
+  {
+    "person_id": "09234567890",
+    "full_name": {
+      "first": "Hương",
+      "mid": "Thị Thu",
+      "last": "Trần"
+    },
+    "birth_date": {
+      "day": 10,
+      "month": 3,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Mễ Trì Hạ",
+      "district": "Nam Từ Liêm",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1010",
+    "email": "thuhuongcute@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.68
+  },
+  {
+    "person_id": "09234567891",
+    "full_name": {
+      "first": "Thành",
+      "mid": "Tiến",
+      "last": "Đinh"
+    },
+    "birth_date": {
+      "day": 16,
+      "month": 9,
+      "year": 2006
+    },
+    "address": {
+      "wards": "Mễ Trì Thượng",
+      "district": "Nam Từ Liêm",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1011",
+    "email": "thanhtiendinh255@xmail.com",
+    "major": "Công nghệ thông tin",
+    "gpa": 3.68
+  }
+]
