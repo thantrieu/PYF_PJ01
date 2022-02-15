@@ -2,7 +2,7 @@ import tkinter
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 
-from net.braniumacademy.chapter10.l1024.controller.studentcontroller import StudentController
+from net.braniumacademy.controller.studentcontroller import StudentController
 
 
 class AddNewStudentView(tkinter.Tk):
@@ -50,5 +50,5 @@ class AddNewStudentView(tkinter.Tk):
         major = self.entry_major.get()
         student = controller.add(person_id, full_name, birth_date, email, gpa_str, major)
         if student is not None:
-            self.master.create_student(student)
+            self.master.item_create_student_selected(student)
             showinfo('Completion', message='Add new student successfully!')

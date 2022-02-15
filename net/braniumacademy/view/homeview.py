@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, Menu
-from net.braniumacademy.chapter10.l1024.view.addnewstudentview import AddNewStudentView
-from net.braniumacademy.chapter10.l1024.view.studentview import StudentView
+from net.braniumacademy.view.addnewstudentview import AddNewStudentView
+from net.braniumacademy.view.studentview import StudentView
 
 
 class HomeView(tk.Tk):
@@ -14,6 +14,7 @@ class HomeView(tk.Tk):
         self.configure(padx=8, pady=8)
         self.menubar = Menu()
         self.configure(menu=self.menubar)
+        self.iconbitmap('./view/assets/icon.ico')
         self.create_notebook()
         self.create_student_view()
         self.create_menu()
@@ -54,8 +55,15 @@ class HomeView(tk.Tk):
 
     def create_menu(self):
         file_menu = Menu(self.menubar, tearoff=False)
-        file_menu.add_command(label='Create New Student', underline=0,
-                              command=lambda: self.create_student())
+        submenu_file = Menu(file_menu, tearoff=False)
+        submenu_file.add_command(label='Student',
+                                 command=lambda: self.create_student())
+        submenu_file.add_command(label='Subject',
+                                 command=lambda: self.create_subject())
+        submenu_file.add_command(label='Register',
+                                 command=lambda: self.create_register())
+        file_menu.add_cascade(label='Create New...',
+                              underline=0, menu=submenu_file)
         # find by submenu
         submenu_find_by = Menu(file_menu, tearoff=False)
         submenu_find_by.add_command(label='By Name')
@@ -67,16 +75,16 @@ class HomeView(tk.Tk):
         # sort by submenu
         submenu_sort_by = Menu(file_menu, tearoff=False)
         submenu_sort_by.add_command(label='By Name Increment',
-                                    command=lambda: self.student_view.sort_by_name())
+                                    command=lambda: self.student_view.item_sort_by_name_selected())
         submenu_sort_by.add_command(label='By Birthdate Increment',
-                                    command=lambda: self.student_view.sort_by_birth_date())
+                                    command=lambda: self.student_view.item_sort_by_birth_date_selected())
         submenu_sort_by.add_command(label='By GPA Decrement',
-                                    command=lambda: self.student_view.sort_by_gpa())
+                                    command=lambda: self.student_view.item_sort_by_gpa_selected())
         submenu_sort_by.add_command(label='By GPA Decrement & Name Increment',
-                                    command=lambda: self.student_view.sort_by_gpa_and_name())
+                                    command=lambda: self.student_view.item_sort_by_gpa_and_name_selected())
         file_menu.add_cascade(label='Sort...', menu=submenu_sort_by)
         # save menu item
-        file_menu.add_command(label='Save', command=lambda : self.save())
+        file_menu.add_command(label='Save', command=lambda: self.save())
         # other menu items
         file_menu.add_separator()
         file_menu.add_command(label='Exit', underline=0, command=self.destroy)
@@ -92,4 +100,10 @@ class HomeView(tk.Tk):
         popup.mainloop()
 
     def save(self):
-        self.student_view.save()
+        self.student_view.item_save_selected()
+
+    def create_subject(self):
+        pass
+
+    def create_register(self):
+        pass

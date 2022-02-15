@@ -66,6 +66,40 @@ class Address:
         return f'{self.wards}, {self.district}, {self.city}'
 
 
+class BirthDate:
+    def __init__(self, day, month, year):
+        self.__day = day
+        self.__month = month
+        self.__year = year
+
+    @property
+    def day(self):
+        return self.__day
+
+    @day.setter
+    def day(self, value):
+        self.__day = value
+
+    @property
+    def month(self):
+        return self.__month
+
+    @month.setter
+    def month(self, value):
+        self.__month = value
+
+    @property
+    def year(self):
+        return self.__year
+
+    @year.setter
+    def year(self, value):
+        self.__year = value
+
+    def __str__(self):
+        return f'{self.day}/{self.month}/{self.year}'
+
+
 class Person:
     def __init__(self, person_id, full_name, birth_date, address):
         self.__person_id = person_id
@@ -97,13 +131,21 @@ class Person:
     def birth_date(self, value):
         self.__birth_date = value
 
+    @property
+    def address(self):
+        return self.__address
+
+    @address.setter
+    def address(self, value):
+        self.__address = value
+
 
 class Student(Person):
     AUTO_ID = 1000
 
     def __init__(self, person_id, full_name,
-                 birth_date, student_id, email, gpa, major):
-        super().__init__(person_id, full_name, birth_date)
+                 birth_date, student_id, email, address, gpa, major):
+        super().__init__(person_id, full_name, birth_date, address)
         if student_id is None:
             self.student_id = f'SV{Student.AUTO_ID}'
             Student.AUTO_ID += 1
@@ -144,3 +186,27 @@ class Student(Person):
     @major.setter
     def major(self, value):
         self.__major = value
+
+    def to_dict(self):
+        return {
+            'person_id': self.person_id,
+            'full_name': {
+                'first': self.full_name.first_name,
+                'last': self.full_name.last_name,
+                'mid': self.full_name.mid_name
+            },
+            'birth_date': {
+                'day': self.birth_date.day,
+                'month': self.birth_date.month,
+                'year': self.birth_date.year
+            },
+            'address': {
+                'wards': self.address.wards,
+                'district': self.address.district,
+                'city': self.address.city
+            },
+            'student_id': self.student_id,
+            'email': self.email,
+            'major': self.major,
+            'gpa': self.gpa
+        }

@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror, askyesno, showinfo
-from net.braniumacademy.chapter10.l1024.utils import *
-from net.braniumacademy.chapter10.l1024.controller.studentcontroller import StudentController
-from net.braniumacademy.chapter10.l1024.view.editstudentview import EditStudentView
+from net.braniumacademy.utils import *
+from net.braniumacademy.controller.studentcontroller import StudentController
+from net.braniumacademy.view.editstudentview import EditStudentView
 
 
 class StudentView:
@@ -17,9 +17,12 @@ class StudentView:
         self.load_student()
 
     def create_widgets(self):
-        columns = ('id', 'full_name', 'birth_date', 'student_id', 'email', 'gpa', 'major')
-        self.tbl_student = ttk.Treeview(self.frame, columns=columns, show='headings', height=10)
-        self.tbl_student.grid(row=0, column=0, columnspan=3, sticky=tk.NSEW, pady=4, padx=4)
+        columns = ('id', 'full_name', 'birth_date',
+                   'student_id', 'email', 'address', 'gpa', 'major')
+        self.tbl_student = ttk.Treeview(self.frame, columns=columns,
+                                        show='headings', height=10)
+        self.tbl_student.grid(row=0, column=0, columnspan=3,
+                              sticky=tk.NSEW, pady=4, padx=4)
         style = ttk.Style()
         style.theme_use('alt')  # other theme can use: clam, classic, default
         style.configure('my.Treeview.Heading', font=('Calibri', 11, 'bold'),
@@ -34,6 +37,7 @@ class StudentView:
         self.tbl_student.heading('birth_date', text='Ngày sinh')
         self.tbl_student.heading('student_id', text='Mã SV')
         self.tbl_student.heading('email', text='Email')
+        self.tbl_student.heading('address', text='Địa chỉ')
         self.tbl_student.heading('gpa', text='Điểm TB')
         self.tbl_student.heading('major', text='Chuyên ngành')
         # config columns
@@ -41,19 +45,23 @@ class StudentView:
         self.tbl_student.column(1, stretch=tk.NO, width=150, anchor=tk.W)
         self.tbl_student.column(2, stretch=tk.NO, width=100, anchor=tk.CENTER)
         self.tbl_student.column(3, stretch=tk.NO, width=100, anchor=tk.CENTER)
-        self.tbl_student.column(4, stretch=tk.NO, width=150, anchor=tk.W)
-        self.tbl_student.column(5, stretch=tk.NO, width=100, anchor=tk.CENTER)
-        self.tbl_student.column(6, stretch=tk.NO, width=150, anchor=tk.W)
+        self.tbl_student.column(4, stretch=tk.NO, width=180, anchor=tk.W)
+        self.tbl_student.column(5, stretch=tk.NO, width=220, anchor=tk.W)
+        self.tbl_student.column(6, stretch=tk.NO, width=100, anchor=tk.CENTER)
+        self.tbl_student.column(7, stretch=tk.NO, width=150, anchor=tk.W)
         # add scrollbar
-        scrollbar = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.tbl_student.yview)
+        scrollbar = ttk.Scrollbar(self.frame, orient=tk.VERTICAL,
+                                  command=self.tbl_student.yview)
         scrollbar.grid(row=0, column=3, sticky=tk.NS)
         self.tbl_student['yscrollcommand'] = scrollbar.set
         # add buttons
         ttk.Button(self.frame, text='Load Students', command=self.load_student). \
             grid(row=1, column=0, ipady=4, ipadx=4)
-        ttk.Button(self.frame, text='Edit GPA', command=self.edit_student). \
+        ttk.Button(self.frame, text='Edit GPA',
+                   command=self.btn_edit_student_clicked). \
             grid(row=1, column=1, ipady=4, ipadx=4)
-        ttk.Button(self.frame, text='Remove Items', command=self.remove_student). \
+        ttk.Button(self.frame, text='Remove Items',
+                   command=self.btn_remove_student_clicked). \
             grid(row=1, column=2, ipady=4, ipadx=4)
 
     def load_student(self):
@@ -70,10 +78,12 @@ class StudentView:
                 tag = 'even'
             else:
                 tag = 'odd'
-            self.tbl_student.insert('', tk.END, values=student_to_tuple(student), tags=(tag,))
+            self.tbl_student.insert('', tk.END,
+                                    values=student_to_tuple(student),
+                                    tags=(tag,))
             index += 1
 
-    def remove_student(self):
+    def btn_remove_student_clicked(self):
         item_selected = self.tbl_student.selection()
         if len(item_selected) > 0:
             title = 'Confirmation'
@@ -89,34 +99,34 @@ class StudentView:
         else:
             showerror(title='Error', message='Please select a row to delete first!')
 
-    def edit_student(self):
+    def btn_edit_student_clicked(self):
         item_selected = self.tbl_student.selection()
         if len(item_selected) > 0:
             item = item_selected[0]
             index = (int(item[1:], 16) - 1) % len(self.students)
             EditStudentView(self, self.students[index]).attributes('-topmost', True)
 
-    def create_student(self, student: Student):
+    def item_create_student_selected(self, student: Student):
         self.students.append(student)
         self.show_students()
 
-    def sort_by_name(self):
+    def item_sort_by_name_selected(self):
         self.controller.sort_by_name(self.students)
         # self.students.sort(key=lambda x: (x.full_name.first_name, x.full_name.last_name))
         self.show_students()
 
-    def sort_by_birth_date(self):
+    def item_sort_by_birth_date_selected(self):
         self.controller.sort_by_birth_date(self.students)
         self.show_students()
 
-    def sort_by_gpa(self):
+    def item_sort_by_gpa_selected(self):
         self.controller.sort_by_gpa(self.students)
         self.show_students()
 
-    def sort_by_gpa_and_name(self):
+    def item_sort_by_gpa_and_name_selected(self):
         self.controller.sort_by_name_gpa(self.students)
         self.show_students()
 
-    def save(self):
+    def item_save_selected(self):
         self.controller.write_file(STUDENT_FILE_NAME, students=self.students)
         showinfo('Successfully', 'Save students data to file successfully!')

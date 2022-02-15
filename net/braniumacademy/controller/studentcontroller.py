@@ -5,13 +5,14 @@ from abc import abstractmethod
 from datetime import datetime
 from tkinter.messagebox import showerror
 
-from net.braniumacademy.model.student import Student, FullName
+from net.braniumacademy.model.student import Student
 from net.braniumacademy.error.exceptions import *
+from net.braniumacademy.utils import create_birth_date, decode_student
 
 
 class IStudentController(abc.ABC):
     @abstractmethod
-    def add(self, person_id, full_name, birth_date_str, email, gpa_str, major) -> Student:
+    def add(self, person_id, full_name, birth_date_str, email, address, gpa_str, major) -> Student:
         pass
 
     @abstractmethod
@@ -88,8 +89,8 @@ class IStudentController(abc.ABC):
 
 
 class StudentController(IStudentController):
-    def add(self, person_id, full_name,
-            birth_date_str, email, gpa_str, major) -> Student | None:
+    def add(self, person_id, full_name, birth_date_str,
+            email, address, gpa_str, major) -> Student | None:
         gpa = 0.0
         gpa_pattern = r'\d.\d'
         matcher = re.search(gpa_pattern, gpa_str)
@@ -104,9 +105,9 @@ class StudentController(IStudentController):
             self.check_birth_date_valid(birth_date_str)
             self.check_email_valid(email)
             self.check_gpa_valid(gpa)
+            birth_date = create_birth_date(birth_date_str)
             return Student(person_id, full_name,
-                           datetime.strptime(birth_date_str, '%d/%m/%Y'),
-                           None, email, gpa, major)
+                           birth_date, None, email, address, gpa, major)
         except NameInvalidError as e:
             showerror('NameInvalidError', message=e.__str__())
         except BirthdateError as e:
@@ -181,7 +182,7 @@ class StudentController(IStudentController):
     def check_name_valid(self, name: str) -> bool:
         # Họ tên gồm chữ cái, dấu cách, dài 2-40 kí tự
         # cho phép tên tiếng Việt
-        pattern = pattern = '^([a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠ' \
+        pattern = '^([a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠ' \
                             'ỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+\\s?){2,40}$'
         matcher = re.search(pattern, name, flags=re.IGNORECASE)
         if len(name) > 40:
@@ -217,33 +218,27 @@ class StudentController(IStudentController):
         else:
             raise EmailError(email)
 
-    def decode_student(self, dct):
-        if 'student_id' in dct:
-            pass
-        else:
-            return dct
-
     def read_file(self, file_name: str) -> list[Student]:
         with open(file_name, encoding='UTF-8') as reader:
             data = reader.read()
-            students = json.loads(data, object_hook=self.decode_student)
+            students = json.loads(data, object_hook=decode_student)
         students.sort(key=lambda x: x.student_id)
         self.update_student_id(students[len(students) - 1].student_id)
         return students
 
     def write_file(self, file_name: str, students: list[Student]):
         with open(file_name, 'w', encoding='UTF-8') as writer:
-            for student in students:
-                writer.write(f'{student.person_id}\n')
-                writer.write(f'{student.full_name}\n')
-                writer.write(f'{student.birth_date.strftime("%d/%m/%Y")}\n')
-                writer.write(f'{student.student_id}\n')
-                writer.write(f'{student.email}\n')
-                writer.write(f'{student.gpa}\n')
-                writer.write(f'{student.major}\n')
+            encoded_data = json.dumps(students, cls=StudentJSONEncoder,
+                                      indent=2, ensure_ascii=False)
+            writer.write(encoded_data)
 
     def update_student_id(self, current_id: str):
         if current_id is not None:
             id_number_str = current_id[2:]
             id_number = int(id_number_str) + 1
             Student.AUTO_ID = id_number
+
+
+class StudentJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        return o.to_dict()

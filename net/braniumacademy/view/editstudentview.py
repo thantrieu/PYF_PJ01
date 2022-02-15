@@ -2,8 +2,8 @@ import tkinter
 from tkinter import ttk
 from tkinter.messagebox import showinfo, askyesno, showerror
 
-from net.braniumacademy.chapter10.l1024.controller.studentcontroller import StudentController
-from net.braniumacademy.chapter10.l1024.error.exceptions import GpaError
+from net.braniumacademy.controller.studentcontroller import StudentController
+from net.braniumacademy.error.exceptions import GpaError
 
 
 class EditStudentView(tkinter.Tk):
