@@ -207,14 +207,14 @@ class StudentView:
         caps, stat = self.controller.statistic_capacity(self.students)
         num_of_student = np.array(stat)
         colors = ['#800080', '#ff5733', '#dfff00', '#000080', '#008000']
-        explode = [0.2, 0.1, 0, 0, 0]
+        explode = [0.1, 0.05, 0, 0, 0]
         plt.pie(num_of_student, colors=colors, labels=caps, explode=explode,
-                shadow=True, startangle=45, autopct='%1.2f%%',
+                shadow=True, startangle=30, autopct='%1.2f%%',
                 textprops={'color': '#ff0000'})
         # set title
-        plt.title('Biểu đồ học lực sinh viên trong lớp')
+        plt.title('Biểu đồ học lực sinh viên')
         # add legend
-        plt.legend(loc='lower right', title='Học lực:')
+        plt.legend(loc='lower right', title='Học lực:', bbox_to_anchor=(1.25, 0))
         plt.show()
 
     def search(self):
