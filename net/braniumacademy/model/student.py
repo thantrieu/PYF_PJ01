@@ -154,6 +154,7 @@ class Student(Person):
         self.__email = email
         self.__gpa = gpa
         self.__major = major
+        self.__capacity = ''
 
     @property
     def student_id(self):
@@ -186,6 +187,14 @@ class Student(Person):
     @major.setter
     def major(self, value):
         self.__major = value
+
+    @property
+    def capacity(self):
+        return self.__capacity
+
+    @capacity.setter
+    def capacity(self, value):
+        self.__capacity = value
 
     def to_dict(self):
         return {

@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+import numpy as np
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror, askyesno, showinfo
@@ -151,18 +153,21 @@ class StudentView:
             index += 1
 
     def btn_remove_student_clicked(self):
+        students = self.controller.read_file(STUDENT_FILE_NAME)
         item_selected = self.tbl_student.selection()
         if len(item_selected) > 0:
             title = 'Confirmation'
             message = 'Do you want to delete item(s) selected?'
             ans = askyesno(title, message)
             if ans:
-                for item in item_selected:
-                    index = int(item[1:], 16) - 1  # lấy vị trí hàng cần xóa - 1 có được vị trí phần tử trong danh sách
-                    self.controller.remove(self.students, index)  # xóa phần tử trong danh sách sinh viên
-                    self.tbl_student.delete(item)  # xóa phần tử trong bảng
-                self.controller.write_file(STUDENT_FILE_NAME, self.students)  # update file
-                showinfo(title='Infomation', message='Delete successfully!')
+                item = item_selected[0]
+                index = (int(item[1:], 16) - 1) % len(self.students)  # lấy vị trí hàng cần xóa - 1 có được vị trí phần tử trong danh sách
+                student_id = self.students[index].student_id
+                self.controller.remove(self.students, student_id)  # xóa phần tử trong danh sách sinh viên
+                self.controller.remove(students, student_id)  # xóa phần tử trong danh sách nguyên bản
+                self.tbl_student.delete(item)  # xóa phần tử trong bảng
+                self.controller.write_file(STUDENT_FILE_NAME, students)  # update file
+                showinfo(title='Infomation', message=f'Delete student id "{student_id}" successfully!')
         else:
             showerror(title='Error', message='Please select a row to delete first!')
 
@@ -199,7 +204,18 @@ class StudentView:
         showinfo('Successfully', 'Save students data to file successfully!')
 
     def draw_chart(self):
-        pass
+        caps, stat = self.controller.statistic_capacity(self.students)
+        num_of_student = np.array(stat)
+        colors = ['#800080', '#ff5733', '#dfff00', '#000080', '#008000']
+        explode = [0.2, 0.1, 0, 0, 0]
+        plt.pie(num_of_student, colors=colors, labels=caps, explode=explode,
+                shadow=True, startangle=45, autopct='%1.2f%%',
+                textprops={'color': '#ff0000'})
+        # set title
+        plt.title('Biểu đồ học lực sinh viên trong lớp')
+        # add legend
+        plt.legend(loc='lower right', title='Học lực:')
+        plt.show()
 
     def search(self):
         key = self.search_entry.get()
@@ -212,13 +228,41 @@ class StudentView:
             if criteria == search_criterias[0]:
                 self.search_by_name(key)
             elif criteria == search_criterias[1]:
-                self.search_by_gpa(float(key))
+                if is_gpa_valid(key):
+                    gpa = float(key)
+                    if gpa < 0 or gpa > 4.0:
+                        showerror('Invalid GPA', 'GPA must in range [0, 4.0]')
+                    else:
+                        self.search_by_gpa(gpa)
+                else:
+                    showerror('Invalid GPA', 'GPA must be number from 0.0 to 4.0')
             elif criteria == search_criterias[2]:
-                self.search_by_birth_date(int(key))
+                if is_date_valid(key):
+                    day = int(key)
+                    if day < 1 or day > 31:
+                        showerror('Invalid day', 'Day must in range [1, 31]')
+                    else:
+                        self.search_by_birth_date(day)
+                else:
+                    showerror('Invalid day', 'Day must be number from 1 to 31')
             elif criteria == search_criterias[3]:
-                self.search_by_birth_month(int(key))
+                if is_date_valid(key):
+                    month = int(key)
+                    if month < 1 or month > 12:
+                        showerror('Invalid day', 'Day must in range [1, 31]')
+                    else:
+                        self.search_by_birth_month(month)
+                else:
+                    showerror('Invalid month', 'Month must be number from 1 to 12')
             elif criteria == search_criterias[4]:
-                self.search_by_birth_year(int(key))
+                if is_date_valid(key):
+                    year = int(key)
+                    if year < 1900 or year > 2030:
+                        showerror('Invalid year', 'Day must in range [1, 31]')
+                    else:
+                        self.search_by_birth_year(year)
+                else:
+                    showerror('Invalid year', 'Year must be number from 1900 to 2030')
 
     def search_by_name(self, key: str):
         self.load_student(False)  # reload student
@@ -228,6 +272,7 @@ class StudentView:
             self.show_students()
             showinfo('Search Result', 'No result found!')
         else:
+            self.students.clear()
             self.students = result.copy()
             self.show_students()
 
@@ -239,6 +284,7 @@ class StudentView:
             self.show_students()
             showinfo('Search Result', 'No result found!')
         else:
+            self.students.clear()
             self.students = result.copy()
             self.show_students()
 
@@ -250,6 +296,7 @@ class StudentView:
             self.show_students()
             showinfo('Search Result', 'No result found!')
         else:
+            self.students.clear()
             self.students = result.copy()
             self.show_students()
 
@@ -261,6 +308,7 @@ class StudentView:
             self.show_students()
             showinfo('Search Result', 'No result found!')
         else:
+            self.students.clear()
             self.students = result.copy()
             self.show_students()
 
@@ -272,5 +320,6 @@ class StudentView:
             self.show_students()
             showinfo('Search Result', 'No result found!')
         else:
+            self.students.clear()
             self.students = result.copy()
             self.show_students()

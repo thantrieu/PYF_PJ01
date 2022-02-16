@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from net.braniumacademy.model.student import Student, BirthDate, FullName, Address
@@ -13,6 +14,52 @@ search_criterias = [
     'Search By Birth Month',
     'Search By Birth Year'
 ]
+
+capacities = [
+    'Xuất sắc',
+    'Giỏi',
+    'Khá',
+    'Trung bình',
+    'Yếu'
+]
+
+majors = [
+    'Công nghệ thông tin',
+    'Công nghệ sinh học',
+    'Đa phương tiện',
+    'Quản trị kinh doanh',
+    'Điện tử viễn thông',
+    'Quản trị nhân lực'
+]
+
+
+def is_gpa_valid(gpa_str: str) -> bool:
+    pattern = r'(\d+.\d+)|\d+|.\d+'
+    if re.search(pattern, gpa_str):
+        return True
+    else:
+        return False
+
+
+def is_date_valid(input_str: str) -> bool:
+    pattern = r'\d+'
+    if re.search(pattern, input_str):
+        return True
+    else:
+        return False
+
+
+def capacity(gpa: float) -> str:
+    if gpa >= 3.6:
+        return 'Xuất sắc'
+    elif gpa >= 3.2:
+        return 'Giỏi'
+    elif gpa >= 2.6:
+        return 'Khá'
+    elif gpa >= 2.0:
+        return 'Trung bình'
+    else:
+        return 'Yếu'
 
 
 def student_to_tuple(student: Student) -> tuple[str | str, ...]:
@@ -77,3 +124,38 @@ def delta_time(tm):
     birth_date = datetime.strptime(tm.__str__(), '%d/%m/%Y')
     total_sec = (birth_date - datetime.strptime('01/01/1970', '%d/%m/%Y')).total_seconds()
     return total_sec
+
+
+def create_full_name(fname: str) -> FullName:
+    data = fname.split(' ')
+    first_name = data[len(data) - 1]
+    last_name = data[0]
+    mid_name = ''
+    for i in range(1, len(data) - 1):
+        mid_name += data[i]
+    return FullName(first_name, last_name, mid_name.strip())
+
+
+def create_address(address: str) -> Address:
+    data = address.split(', ')
+    wards = data[0]
+    district = data[1]
+    city = data[2]
+    return Address(wards, district, city)
+
+
+def remove_student_from_list(students: list[Student], student_id: str) -> list[Student]:
+    index = 0
+    for student in students:
+        if student.student_id == student_id:
+            students.pop(index)
+            break
+        index += 1
+    return students
+
+
+def find_student_index_by_id(students: list[Student], student_id: str) -> int:
+    for i in range(len(students)):
+        if students[i].student_id == student_id:
+            return i
+    return -1

@@ -4,6 +4,7 @@ from tkinter.messagebox import showinfo, askyesno, showerror
 
 from net.braniumacademy.controller.studentcontroller import StudentController
 from net.braniumacademy.error.exceptions import GpaError
+from net.braniumacademy.utils import STUDENT_FILE_NAME, find_student_index_by_id
 
 
 class EditStudentView(tkinter.Tk):
@@ -46,7 +47,11 @@ class EditStudentView(tkinter.Tk):
         ans = askyesno('Confirmation', 'Bạn có chắc muốn lưu các thay đổi?')
         if ans:
             try:
-                controller.edit(student=self.student, gpa=gpa)
+                students = controller.read_file(STUDENT_FILE_NAME)
+                controller.update_gpa(student=self.student, gpa=gpa)
+                index = find_student_index_by_id(students, self.student.student_id)
+                controller.update_gpa(students[index], gpa)
+                controller.write_file(STUDENT_FILE_NAME, students)
                 self.master.show_students()
                 showinfo('Completion', message='Update student\'s GPA successfully!')
                 self.destroy()

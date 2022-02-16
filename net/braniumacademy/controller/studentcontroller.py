@@ -2,12 +2,11 @@ import abc
 import json
 import re
 from abc import abstractmethod
-from datetime import datetime
 from tkinter.messagebox import showerror
 
 from net.braniumacademy.model.student import Student
 from net.braniumacademy.error.exceptions import *
-from net.braniumacademy.utils import create_birth_date, decode_student, delta_time
+from net.braniumacademy.utils import *
 
 
 class IStudentController(abc.ABC):
@@ -16,11 +15,11 @@ class IStudentController(abc.ABC):
         pass
 
     @abstractmethod
-    def edit(self, student: Student, gpa: float) -> Student:
+    def update_gpa(self, student: Student, gpa: float) -> Student:
         pass
 
     @abstractmethod
-    def remove(self, students: list[Student], index: int) -> bool:
+    def remove(self, students: list[Student], student_id: str) -> bool:
         pass
 
     @abstractmethod
@@ -87,6 +86,14 @@ class IStudentController(abc.ABC):
     def update_student_id(self, current_id: str):
         pass
 
+    @abstractmethod
+    def calculate_capacity(self, students: list[Student]):
+        pass
+
+    @abstractmethod
+    def statistic_capacity(self, students: list[Student]) -> tuple:
+        pass
+
 
 class StudentController(IStudentController):
     def add(self, person_id, full_name, birth_date_str,
@@ -105,9 +112,11 @@ class StudentController(IStudentController):
             self.check_birth_date_valid(birth_date_str)
             self.check_email_valid(email)
             self.check_gpa_valid(gpa)
+            name = create_full_name(full_name)
             birth_date = create_birth_date(birth_date_str)
-            return Student(person_id, full_name,
-                           birth_date, None, email, address, gpa, major)
+            address_ = create_address(address)
+            return Student(person_id, name,
+                           birth_date, None, email, address_, gpa, major)
         except NameInvalidError as e:
             showerror('NameInvalidError', message=e.__str__())
         except BirthdateError as e:
@@ -118,17 +127,20 @@ class StudentController(IStudentController):
             showerror('GPA Error!', message=e.__str__())
         return None
 
-    def edit(self, student: Student, gpa: float) -> Student:
+    def update_gpa(self, student: Student, gpa: float) -> Student:
         if self.check_gpa_valid(gpa):
             student.gpa = gpa
             return student
         else:
             raise GpaError(gpa)
 
-    def remove(self, students: list[Student], index: int) -> bool:
-        if 0 <= index < len(students):
-            students.pop(index)
-            return True
+    def remove(self, students: list[Student], student_id: str) -> bool:
+        index = 0
+        for student in students:
+            if student.student_id == student_id:
+                students.pop(index)
+                return True
+            index += 1
         return False
 
     def search_by_name(self, students: list[Student], key: str) -> list[Student]:
@@ -183,7 +195,7 @@ class StudentController(IStudentController):
         # Họ tên gồm chữ cái, dấu cách, dài 2-40 kí tự
         # cho phép tên tiếng Việt
         pattern = '^([a-zẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠ' \
-                            'ỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+\\s?){2,40}$'
+                  'ỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ]+\\s?){2,40}$'
         matcher = re.search(pattern, name, flags=re.IGNORECASE)
         if len(name) > 40:
             msg = 'Name too long. Permit only up to 40 characters long'
@@ -237,6 +249,21 @@ class StudentController(IStudentController):
             id_number_str = current_id[2:]
             id_number = int(id_number_str) + 1
             Student.AUTO_ID = id_number
+
+    def calculate_capacity(self, students: list[Student]):
+        for student in students:
+            student.capacity = capacity(student.gpa)
+
+    def statistic_capacity(self, students: list[Student]) -> tuple:
+        self.calculate_capacity(students)
+        stat = []
+        for cap in capacities:
+            counter = 0
+            for s in students:
+                if s.capacity == cap:
+                    counter += 1
+            stat.append(counter)
+        return capacities, stat
 
 
 class StudentJSONEncoder(json.JSONEncoder):
