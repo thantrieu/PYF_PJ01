@@ -7,7 +7,7 @@ from tkinter.messagebox import showerror
 
 from net.braniumacademy.model.student import Student
 from net.braniumacademy.error.exceptions import *
-from net.braniumacademy.utils import create_birth_date, decode_student
+from net.braniumacademy.utils import create_birth_date, decode_student, delta_time
 
 
 class IStudentController(abc.ABC):
@@ -134,7 +134,7 @@ class StudentController(IStudentController):
     def search_by_name(self, students: list[Student], key: str) -> list[Student]:
         result = []
         for student in students:
-            matcher = re.search(f'.*{key}.*', student.full_name.first_name)
+            matcher = re.search(f'.*{key}.*', student.full_name.first_name, flags=re.IGNORECASE)
             if matcher:
                 result.append(student)
         return result
@@ -174,7 +174,7 @@ class StudentController(IStudentController):
         students.sort(key=lambda x: x.gpa, reverse=True)
 
     def sort_by_birth_date(self, students: list[Student]):
-        students.sort(key=lambda x: (x.birth_date - datetime.strptime('01/01/1970', '%d/%m/%Y')).total_seconds())
+        students.sort(key=lambda x: delta_time(x.birth_date))
 
     def sort_by_name_gpa(self, students: list[Student]):
         students.sort(key=lambda x: (-x.gpa, x.full_name.first_name, x.full_name.last_name))

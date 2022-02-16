@@ -1,8 +1,18 @@
+from datetime import datetime
+
 from net.braniumacademy.model.student import Student, BirthDate, FullName, Address
 
 STUDENT_FILE_NAME = 'student.json'
 SUBJECT_FILE_NAME = 'subject.json'
 REGISTER_FILE_NAME = 'register.json'
+
+search_criterias = [
+    'Search By Name',
+    'Search By GPA',
+    'Search By Birth Date',
+    'Search By Birth Month',
+    'Search By Birth Year'
+]
 
 
 def student_to_tuple(student: Student) -> tuple[str | str, ...]:
@@ -61,3 +71,9 @@ def decode_student(dct):
         return Student(pid, full_name, birth_date, sid, email, address, gpa, major)
     else:
         return dct
+
+
+def delta_time(tm):
+    birth_date = datetime.strptime(tm.__str__(), '%d/%m/%Y')
+    total_sec = (birth_date - datetime.strptime('01/01/1970', '%d/%m/%Y')).total_seconds()
+    return total_sec

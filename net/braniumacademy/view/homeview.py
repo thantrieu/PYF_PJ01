@@ -11,7 +11,6 @@ class HomeView(tk.Tk):
         self.resizable(False, False)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
-        self.configure(padx=8, pady=8)
         self.menubar = Menu()
         self.configure(menu=self.menubar)
         self.iconbitmap('./view/assets/icon.ico')
@@ -24,12 +23,10 @@ class HomeView(tk.Tk):
         notebook.grid(row=0, column=0, sticky=tk.NSEW)
         # add student frame
         self.frm_student = ttk.Frame(notebook)
-        self.frm_student.rowconfigure(0, weight=4)
-        self.frm_student.rowconfigure(1, weight=1)
-        self.frm_student.columnconfigure(0, weight=3)
-        self.frm_student.columnconfigure(1, weight=3)
-        self.frm_student.columnconfigure(2, weight=3)
-        self.frm_student.columnconfigure(3, weight=1)
+        # cấu hình cho các cột của frame có cùng độ rộng
+        self.frm_student.columnconfigure(0, weight=1, uniform='fred')
+        self.frm_student.columnconfigure(1, weight=1, uniform='fred')
+        self.frm_student.columnconfigure(2, weight=1, uniform='fred')
         self.frm_student.grid(row=0, column=0)
         # add subject frame
         self.frm_subject = ttk.Frame(notebook)
@@ -64,25 +61,6 @@ class HomeView(tk.Tk):
                                  command=lambda: self.create_register())
         file_menu.add_cascade(label='Create New...',
                               underline=0, menu=submenu_file)
-        # find by submenu
-        submenu_find_by = Menu(file_menu, tearoff=False)
-        submenu_find_by.add_command(label='By Name')
-        submenu_find_by.add_command(label='By GPA')
-        submenu_find_by.add_command(label='By Birth Day')
-        submenu_find_by.add_command(label='By Birth Month')
-        submenu_find_by.add_command(label='By Birth Year')
-        file_menu.add_cascade(label='Find...', menu=submenu_find_by)
-        # sort by submenu
-        submenu_sort_by = Menu(file_menu, tearoff=False)
-        submenu_sort_by.add_command(label='By Name Increment',
-                                    command=lambda: self.student_view.item_sort_by_name_selected())
-        submenu_sort_by.add_command(label='By Birthdate Increment',
-                                    command=lambda: self.student_view.item_sort_by_birth_date_selected())
-        submenu_sort_by.add_command(label='By GPA Decrement',
-                                    command=lambda: self.student_view.item_sort_by_gpa_selected())
-        submenu_sort_by.add_command(label='By GPA Decrement & Name Increment',
-                                    command=lambda: self.student_view.item_sort_by_gpa_and_name_selected())
-        file_menu.add_cascade(label='Sort...', menu=submenu_sort_by)
         # save menu item
         file_menu.add_command(label='Save', command=lambda: self.save())
         # other menu items
@@ -90,6 +68,8 @@ class HomeView(tk.Tk):
         file_menu.add_command(label='Exit', underline=0, command=self.destroy)
         # add to menu bar
         self.menubar.add_cascade(label='File', menu=file_menu, underline=0)
+        self.menubar.add_cascade(label='Help', underline=0)
+        self.menubar.add_cascade(label='Settings', underline=0)
 
     def create_student_view(self):
         self.student_view = StudentView(self.frm_student)
