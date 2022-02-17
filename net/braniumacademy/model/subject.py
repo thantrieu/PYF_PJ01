@@ -1,6 +1,12 @@
 class Subject:
+    AUTO_ID = 1000
+
     def __init__(self, subject_id, name, credit, lesson, category):
-        self.__subject_id = subject_id
+        if subject_id != 0:
+            self.__subject_id = subject_id
+        else:
+            self.__subject_id = Subject.AUTO_ID
+            Subject.AUTO_ID += 1
         self.__name = name
         self.__credit = credit
         self.__lesson = lesson

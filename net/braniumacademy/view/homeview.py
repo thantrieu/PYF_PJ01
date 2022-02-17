@@ -1,12 +1,20 @@
 import tkinter as tk
 from tkinter import ttk, Menu
 from net.braniumacademy.view.addnewstudentview import AddNewStudentView
+from net.braniumacademy.view.registerview import RegisterView
 from net.braniumacademy.view.studentview import StudentView
+from net.braniumacademy.view.subjectview import SubjectView
 
 
 class HomeView(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.register_view = None
+        self.subject_view = None
+        self.student_view = None
+        self.frm_register = None
+        self.frm_subject = None
+        self.frm_student = None
         self.title('QUẢN LÝ ĐĂNG KÝ MÔN HỌC')
         self.resizable(False, False)
         self.rowconfigure(0, weight=1)
@@ -15,7 +23,7 @@ class HomeView(tk.Tk):
         self.configure(menu=self.menubar)
         self.iconbitmap('./view/assets/icon.ico')
         self.create_notebook()
-        self.create_student_view()
+        self.create_child_views()
         self.create_menu()
 
     def create_notebook(self):
@@ -30,12 +38,8 @@ class HomeView(tk.Tk):
         self.frm_student.grid(row=0, column=0)
         # add subject frame
         self.frm_subject = ttk.Frame(notebook)
-        self.frm_subject.rowconfigure(0, weight=4)
-        self.frm_subject.rowconfigure(1, weight=1)
-        self.frm_subject.columnconfigure(0, weight=3)
-        self.frm_subject.columnconfigure(1, weight=3)
-        self.frm_subject.columnconfigure(2, weight=3)
-        self.frm_subject.columnconfigure(3, weight=1)
+        self.frm_subject.columnconfigure(0, weight=1, uniform='fred')
+        self.frm_subject.columnconfigure(1, weight=1, uniform='fred')
         self.frm_subject.grid(row=0, column=0)
         # add register frame
         self.frm_register = ttk.Frame(notebook)
@@ -71,8 +75,10 @@ class HomeView(tk.Tk):
         self.menubar.add_cascade(label='Help', underline=0)
         self.menubar.add_cascade(label='Settings', underline=0)
 
-    def create_student_view(self):
+    def create_child_views(self):
         self.student_view = StudentView(self.frm_student)
+        self.subject_view = SubjectView(self.frm_subject)
+        self.register_view = RegisterView(self.frm_register)
 
     def create_student(self):
         popup = AddNewStudentView(self.student_view)

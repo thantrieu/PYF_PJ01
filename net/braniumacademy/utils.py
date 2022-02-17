@@ -2,17 +2,26 @@ import re
 from datetime import datetime
 
 from net.braniumacademy.model.student import Student, BirthDate, FullName, Address
+from net.braniumacademy.model.subject import Subject
 
 STUDENT_FILE_NAME = 'student.json'
 SUBJECT_FILE_NAME = 'subject.json'
 REGISTER_FILE_NAME = 'register.json'
 
-search_criterias = [
+search_student_criterias = [
     'Tìm theo tên',
     'Tìm theo điểm TB',
     'Tìm theo ngày sinh',
     'Tìm theo tháng sinh',
     'Tìm theo năm sinh'
+]
+
+search_subject_criterias = [
+    'Tìm theo mã môn học',
+    'Tìm theo tên gần đúng',
+    'Tìm theo số tín chỉ',
+    'Tìm theo số tiết học',
+    'Tìm theo loại môn học'
 ]
 
 capacities = [
@@ -70,6 +79,11 @@ def student_to_tuple(student: Student) -> tuple[str | str, ...]:
                   student.birth_date, student.student_id,
                   student.email, student.address,
                   f'{student.gpa:0.2f}', student.major])
+
+
+def subject_to_tuple(subject: Subject) -> tuple[str | str, ...]:
+    return tuple([subject.subject_id, subject.name,
+                  subject.credit, subject.lesson, subject.category])
 
 
 def clear_treeview(treeview):
@@ -159,3 +173,15 @@ def find_student_index_by_id(students: list[Student], student_id: str) -> int:
         if students[i].student_id == student_id:
             return i
     return -1
+
+
+def decode_subject(dct):
+    if 'subject_id' in dct:
+        sid = int(dct['subject_id'])
+        name = dct['subject_name']
+        credit = int(dct['subject_credit'])
+        lesson = int(dct['subject_credit'])
+        category = dct['subject_category']
+        return Subject(sid, name, credit, lesson, category)
+    else:
+        return dct

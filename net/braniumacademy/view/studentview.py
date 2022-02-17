@@ -85,7 +85,7 @@ class StudentView:
         # add combobox
         ttk.Label(frm_search, text='Tiêu chí tìm kiếm:'). \
             grid(row=0, column=0, sticky=tk.W, pady=4, padx=4)
-        ttk.Combobox(frm_search, values=search_criterias,
+        ttk.Combobox(frm_search, values=search_student_criterias,
                      textvariable=self.search_var). \
             grid(row=1, column=0, padx=4, pady=4, sticky=tk.W,
                  ipady=4, ipadx=4)
@@ -194,13 +194,15 @@ class StudentView:
                 self.controller.write_file(STUDENT_FILE_NAME, students)  # update file
                 showinfo(title='Infomation', message=f'Delete student id "{student_id}" successfully!')
         else:
-            showerror(title='Error', message='Please select a row to delete first!')
+            showerror(title='Error', message='Please select a student to delete first!')
 
     def btn_edit_student_clicked(self):
         item_selected = self.tbl_student.selection()
         if len(item_selected) > 0:
             index = int(item_selected[0])  # convert iid from str to int
             EditStudentView(self, self.students[index]).attributes('-topmost', True)
+        else:
+            showerror(title='Error', message='Please select a student to edit first!')
 
     def item_create_student_selected(self, student: Student):
         self.students.append(student)
@@ -249,9 +251,9 @@ class StudentView:
         elif len(criteria) == 0:
             showerror('Invalid criteria', 'Please select criteria to search!')
         else:
-            if criteria == search_criterias[0]:
+            if criteria == search_student_criterias[0]:
                 self.search_by_name(key)
-            elif criteria == search_criterias[1]:
+            elif criteria == search_student_criterias[1]:
                 if is_gpa_valid(key):
                     gpa = float(key)
                     if gpa < 0 or gpa > 4.0:
@@ -260,7 +262,7 @@ class StudentView:
                         self.search_by_gpa(gpa)
                 else:
                     showerror('Invalid GPA', 'GPA must be number from 0.0 to 4.0')
-            elif criteria == search_criterias[2]:
+            elif criteria == search_student_criterias[2]:
                 if is_date_valid(key):
                     day = int(key)
                     if day < 1 or day > 31:
@@ -269,7 +271,7 @@ class StudentView:
                         self.search_by_birth_date(day)
                 else:
                     showerror('Invalid day', 'Day must be number from 1 to 31')
-            elif criteria == search_criterias[3]:
+            elif criteria == search_student_criterias[3]:
                 if is_date_valid(key):
                     month = int(key)
                     if month < 1 or month > 12:
@@ -278,7 +280,7 @@ class StudentView:
                         self.search_by_birth_month(month)
                 else:
                     showerror('Invalid month', 'Month must be number from 1 to 12')
-            elif criteria == search_criterias[4]:
+            elif criteria == search_student_criterias[4]:
                 if is_date_valid(key):
                     year = int(key)
                     if year < 1900 or year > 2030:
