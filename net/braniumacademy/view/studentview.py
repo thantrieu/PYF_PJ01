@@ -175,7 +175,7 @@ class StudentView:
                 tag = 'odd'
             self.tbl_student.insert('', tk.END,
                                     values=student_to_tuple(student),
-                                    tags=(tag,))
+                                    tags=(tag,), iid=f'{index-1}')
             index += 1
 
     def btn_remove_student_clicked(self):
@@ -186,13 +186,11 @@ class StudentView:
             message = 'Do you want to delete item(s) selected?'
             ans = askyesno(title, message)
             if ans:
-                item = item_selected[0]
-                index = (int(item[1:], 16) - 1) % len(
-                    self.students)  # lấy vị trí hàng cần xóa - 1 có được vị trí phần tử trong danh sách
+                index = int(item_selected[0])
                 student_id = self.students[index].student_id
                 self.controller.remove(self.students, student_id)  # xóa phần tử trong danh sách sinh viên
                 self.controller.remove(students, student_id)  # xóa phần tử trong danh sách nguyên bản
-                self.tbl_student.delete(item)  # xóa phần tử trong bảng
+                self.tbl_student.delete(item_selected[0])  # xóa phần tử trong bảng
                 self.controller.write_file(STUDENT_FILE_NAME, students)  # update file
                 showinfo(title='Infomation', message=f'Delete student id "{student_id}" successfully!')
         else:
@@ -201,8 +199,7 @@ class StudentView:
     def btn_edit_student_clicked(self):
         item_selected = self.tbl_student.selection()
         if len(item_selected) > 0:
-            item = item_selected[0]
-            index = (int(item[1:], 16) - 1) % len(self.students)
+            index = int(item_selected[0])  # convert iid from str to int
             EditStudentView(self, self.students[index]).attributes('-topmost', True)
 
     def item_create_student_selected(self, student: Student):
