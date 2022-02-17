@@ -8,11 +8,11 @@ SUBJECT_FILE_NAME = 'subject.json'
 REGISTER_FILE_NAME = 'register.json'
 
 search_criterias = [
-    'Search By Name',
-    'Search By GPA',
-    'Search By Birth Date',
-    'Search By Birth Month',
-    'Search By Birth Year'
+    'Tìm theo tên',
+    'Tìm theo điểm TB',
+    'Tìm theo ngày sinh',
+    'Tìm theo tháng sinh',
+    'Tìm theo năm sinh'
 ]
 
 capacities = [

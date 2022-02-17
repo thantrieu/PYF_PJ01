@@ -11,6 +11,19 @@ from net.braniumacademy.view.editstudentview import EditStudentView
 class StudentView:
     def __init__(self, frame):
         super().__init__()
+        self.img_refresh = None
+        self.btn_reload = None
+        self.img_remove = None
+        self.btn_remove = None
+        self.img_chart = None
+        self.btn_edit = None
+        self.img_edit = None
+        self.btn_draw_chart = None
+        self.search_entry = None
+        self.search_var = None
+        self.sort_var = None
+        self.img_search = None
+        self.btn_search = None
         self.tbl_student = None
         self.frame = frame
         self.students = []
@@ -64,73 +77,86 @@ class StudentView:
 
     def create_search_frame(self):
         self.search_var = tk.StringVar()
-        frm_search = ttk.LabelFrame(self.frame, text='Search by')
+        frm_search = ttk.LabelFrame(self.frame, text='Tìm kiếm')
         # config set all columns have same width space
         frm_search.columnconfigure(0, weight=1, uniform='fred')
         frm_search.columnconfigure(1, weight=1, uniform='fred')
         frm_search.grid(row=1, column=0, sticky=tk.NSEW, pady=4, padx=4)
         # add combobox
-        ttk.Label(frm_search, text='Search criteria:'). \
+        ttk.Label(frm_search, text='Tiêu chí tìm kiếm:'). \
             grid(row=0, column=0, sticky=tk.W, pady=4, padx=4)
         ttk.Combobox(frm_search, values=search_criterias,
                      textvariable=self.search_var). \
-            grid(row=1, column=0, padx=4, pady=4, sticky=tk.W)
+            grid(row=1, column=0, padx=4, pady=4, sticky=tk.W,
+                 ipady=4, ipadx=4)
         # add search part
-        ttk.Label(frm_search, text='Keyword:'). \
+        ttk.Label(frm_search, text='Từ khóa:'). \
             grid(row=0, column=1, sticky=tk.W, padx=4, pady=4)
         self.search_entry = ttk.Entry(frm_search)
-        self.search_entry.grid(row=1, column=1, sticky=tk.EW, padx=8, pady=4)
-        ttk.Button(frm_search, text='Search',
-                   command=self.search, width=15). \
-            grid(row=2, column=1, padx=4, pady=4)
+        self.search_entry.grid(row=1, column=1, sticky=tk.EW, padx=4, pady=4,
+                               ipadx=4, ipady=4)
+        path = 'view/assets/search_24.png'
+        self.img_search = tk.PhotoImage(file=path)
+        self.btn_search = ttk.Button(frm_search, text='Tìm kiếm',
+                                     image=self.img_search, compound=tk.LEFT,
+                                     command=self.search, width=15)
+        self.btn_search.grid(row=2, column=1, padx=4, pady=4)
 
     def create_sort_frame(self):
         self.sort_var = tk.IntVar(value=0)
-        frm_sort = ttk.LabelFrame(self.frame, text='Sort by')
+        frm_sort = ttk.LabelFrame(self.frame, text='Sắp xếp')
         frm_sort.columnconfigure(0, weight=1, uniform='fred')
         frm_sort.columnconfigure(1, weight=1, uniform='fred')
         frm_sort.grid(row=1, column=1, sticky=tk.NSEW, pady=4, padx=4)
         # add radio button to this frame
-        ttk.Radiobutton(frm_sort, text='Name a-z', value=1,
+        ttk.Radiobutton(frm_sort, text='Theo tên a-z', value=1,
                         variable=self.sort_var,
                         command=self.item_sort_by_name_selected). \
-            grid(row=0, column=0, pady=4, padx=4)
-        ttk.Radiobutton(frm_sort, text='Birth date',
+            grid(row=0, column=0, pady=4, padx=4, sticky=tk.W)
+        ttk.Radiobutton(frm_sort, text='Theo ngày sinh',
                         value=2, variable=self.sort_var,
                         command=self.item_sort_by_birth_date_selected). \
-            grid(row=1, column=0, pady=4, padx=4)
-        ttk.Radiobutton(frm_sort, text='Gpa decrement',
+            grid(row=1, column=0, pady=4, padx=4, sticky=tk.W)
+        ttk.Radiobutton(frm_sort, text='Theo điểm TB',
                         value=3, variable=self.sort_var,
                         command=self.item_sort_by_gpa_selected). \
-            grid(row=0, column=1, pady=4, padx=4)
-        ttk.Radiobutton(frm_sort, text='Gpa and name',
+            grid(row=0, column=1, pady=4, padx=4, sticky=tk.W)
+        ttk.Radiobutton(frm_sort, text='Theo điểm và Họ tên',
                         value=4, variable=self.sort_var,
                         command=self.item_sort_by_gpa_and_name_selected). \
-            grid(row=1, column=1, pady=4, padx=4)
+            grid(row=1, column=1, pady=4, padx=4, sticky=tk.W)
 
     def create_chart_frame(self):
-        frm_other = ttk.LabelFrame(self.frame, text='Chart')
+        frm_other = ttk.LabelFrame(self.frame, text='Biểu đồ')
         frm_other.grid(row=1, column=2, sticky=tk.NSEW, pady=4, padx=4)
-        ttk.Button(frm_other, text='Draw chart', width=20,
-                   command=lambda: self.draw_chart()). \
-            place(rely=0.5, relx=0.5, anchor=tk.CENTER)
+        self.img_chart = tk.PhotoImage(file='view/assets/chart.png')
+        self.btn_draw_chart = ttk.Button(frm_other, text='Vẽ biểu đồ', width=20,
+                                         command=lambda: self.draw_chart(),
+                                         image=self.img_chart, compound=tk.LEFT)
+        self.btn_draw_chart.place(rely=0.5, relx=0.5, anchor=tk.CENTER)
 
     def create_buttons(self):
-        button_frame = ttk.LabelFrame(self.frame, text='Actions')
+        button_frame = ttk.LabelFrame(self.frame, text='Các thao tác')
         button_frame.columnconfigure(0, weight=1, uniform='fred')
         button_frame.columnconfigure(1, weight=1, uniform='fred')
         button_frame.columnconfigure(2, weight=1, uniform='fred')
         button_frame.grid(row=2, column=0, columnspan=3,
                           padx=4, pady=4, sticky=tk.NSEW)
-        ttk.Button(button_frame, text='Reload Students', width=20,
-                   command=self.load_student). \
-            grid(row=0, column=0, ipady=4, ipadx=4, pady=4, padx=4)
-        ttk.Button(button_frame, text='Edit GPA', width=20,
-                   command=self.btn_edit_student_clicked). \
-            grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=4)
-        ttk.Button(button_frame, text='Remove Items', width=20,
-                   command=self.btn_remove_student_clicked). \
-            grid(row=0, column=2, ipadx=4, ipady=4, pady=4, padx=4)
+        self.img_refresh = tk.PhotoImage(file='view/assets/refresh.png')
+        self.btn_reload = ttk.Button(button_frame, text='Làm mới', width=20,
+                                     command=self.load_student, image=self.img_refresh,
+                                     compound=tk.LEFT)
+        self.btn_reload.grid(row=0, column=0, ipady=4, ipadx=4, pady=4, padx=4)
+        self.img_edit = tk.PhotoImage(file='view/assets/editing.png')
+        self.btn_edit = ttk.Button(button_frame, text='Sửa điểm TB', width=20,
+                                   command=self.btn_edit_student_clicked,
+                                   image=self.img_edit, compound=tk.LEFT)
+        self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=4)
+        self.img_remove = tk.PhotoImage(file='view/assets/remove.png')
+        self.btn_remove = ttk.Button(button_frame, text='Xóa bỏ', width=20,
+                                     command=self.btn_remove_student_clicked,
+                                     image=self.img_remove, compound=tk.LEFT)
+        self.btn_remove.grid(row=0, column=2, ipadx=4, ipady=4, pady=4, padx=4)
 
     def load_student(self, should_show=True):
         self.students.clear()
@@ -161,7 +187,8 @@ class StudentView:
             ans = askyesno(title, message)
             if ans:
                 item = item_selected[0]
-                index = (int(item[1:], 16) - 1) % len(self.students)  # lấy vị trí hàng cần xóa - 1 có được vị trí phần tử trong danh sách
+                index = (int(item[1:], 16) - 1) % len(
+                    self.students)  # lấy vị trí hàng cần xóa - 1 có được vị trí phần tử trong danh sách
                 student_id = self.students[index].student_id
                 self.controller.remove(self.students, student_id)  # xóa phần tử trong danh sách sinh viên
                 self.controller.remove(students, student_id)  # xóa phần tử trong danh sách nguyên bản
@@ -206,7 +233,7 @@ class StudentView:
     def draw_chart(self):
         caps, stat = self.controller.statistic_capacity(self.students)
         num_of_student = np.array(stat)
-        colors = ['#800080', '#ff5733', '#dfff00', '#000080', '#008000']
+        colors = ['#94e368', '#9255e3', '#3b88f5', '#14cfff', '#f1ff14']
         explode = [0.1, 0.05, 0, 0, 0]
         plt.pie(num_of_student, colors=colors, labels=caps, explode=explode,
                 shadow=True, startangle=30, autopct='%1.2f%%',

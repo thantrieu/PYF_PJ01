@@ -9,11 +9,11 @@ class AddNewStudentView(tkinter.Tk):
     def __init__(self, master):
         super(AddNewStudentView, self).__init__()
         self.master = master
-        self.geometry('300x200')
+        self.geometry('300x220')
         self.resizable(False, False)
         self.columnconfigure(0, weight=1, uniform='fred')
         self.columnconfigure(1, weight=2, uniform='fred')
-        self.title('Add New Student Popup')
+        self.title('Add New Student Window')
         self.create_widgets()
 
     def create_widgets(self):
