@@ -50,6 +50,18 @@ def is_gpa_valid(gpa_str: str) -> bool:
         return False
 
 
+def is_credit_valid(credit: str) -> bool:
+    pattern = '.*[^0-9\\s].*'
+    matcher = re.search(pattern, credit)
+    if matcher:
+        return False
+    else:
+        int_value = int(credit)
+        if int_value < 2 or int_value > 15:
+            return False
+        return True
+
+
 def is_date_valid(input_str: str) -> bool:
     pattern = r'\d+'
     if re.search(pattern, input_str):
@@ -82,8 +94,9 @@ def student_to_tuple(student: Student) -> tuple[str | str, ...]:
 
 
 def subject_to_tuple(subject: Subject) -> tuple[str | str, ...]:
-    return tuple([subject.subject_id, subject.name,
-                  subject.credit, subject.lesson, subject.category])
+    return tuple([subject.subject_id, subject.subject_name,
+                  subject.subject_credit, subject.subject_lesson,
+                  subject.subject_category])
 
 
 def clear_treeview(treeview):
@@ -180,7 +193,7 @@ def decode_subject(dct):
         sid = int(dct['subject_id'])
         name = dct['subject_name']
         credit = int(dct['subject_credit'])
-        lesson = int(dct['subject_credit'])
+        lesson = int(dct['subject_lesson'])
         category = dct['subject_category']
         return Subject(sid, name, credit, lesson, category)
     else:

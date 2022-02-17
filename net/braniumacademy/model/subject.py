@@ -21,33 +21,33 @@ class Subject:
         self.__subject_id = value
 
     @property
-    def name(self):
+    def subject_name(self):
         return self.__name
 
-    @name.setter
-    def name(self, value):
+    @subject_name.setter
+    def subject_name(self, value):
         self.__name = value
 
     @property
-    def credit(self):
+    def subject_credit(self):
         return self.__credit
 
-    @credit.setter
-    def credit(self, value):
+    @subject_credit.setter
+    def subject_credit(self, value):
         self.__credit = value
 
     @property
-    def category(self):
+    def subject_category(self):
         return self.__category
 
-    @category.setter
-    def category(self, value):
+    @subject_category.setter
+    def subject_category(self, value):
         self.__category = value
 
     @property
-    def lesson(self):
+    def subject_lesson(self):
         return self.__lesson
 
-    @lesson.setter
-    def lesson(self, value):
+    @subject_lesson.setter
+    def subject_lesson(self, value):
         self.__lesson = value

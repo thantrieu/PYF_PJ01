@@ -293,54 +293,29 @@ class StudentView:
     def search_by_name(self, key: str):
         self.load_student(False)  # reload student
         result = self.controller.search_by_name(self.students, key)
-        if len(result) == 0:
-            self.students.clear()
-            self.show_students()
-            showinfo('Search Result', 'No result found!')
-        else:
-            self.students.clear()
-            self.students = result.copy()
-            self.show_students()
+        self.check_result(result)
 
     def search_by_gpa(self, key: float):
         self.load_student(False)  # reload student
         result = self.controller.search_by_gpa(self.students, key)
-        if len(result) == 0:
-            self.students.clear()
-            self.show_students()
-            showinfo('Search Result', 'No result found!')
-        else:
-            self.students.clear()
-            self.students = result.copy()
-            self.show_students()
+        self.check_result(result)
 
     def search_by_birth_date(self, key: int):
         self.load_student(False)  # reload student
         result = self.controller.search_by_birth_date(self.students, key)
-        if len(result) == 0:
-            self.students.clear()
-            self.show_students()
-            showinfo('Search Result', 'No result found!')
-        else:
-            self.students.clear()
-            self.students = result.copy()
-            self.show_students()
+        self.check_result(result)
 
     def search_by_birth_month(self, key: int):
         self.load_student(False)  # reload student
         result = self.controller.search_by_birth_month(self.students, key)
-        if len(result) == 0:
-            self.students.clear()
-            self.show_students()
-            showinfo('Search Result', 'No result found!')
-        else:
-            self.students.clear()
-            self.students = result.copy()
-            self.show_students()
+        self.check_result(result)
 
     def search_by_birth_year(self, key: int):
         self.load_student(False)  # reload student
         result = self.controller.search_by_birth_year(self.students, key)
+        self.check_result(result)
+
+    def check_result(self, result: list[Student]):
         if len(result) == 0:
             self.students.clear()
             self.show_students()

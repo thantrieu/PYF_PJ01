@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror, showinfo
 
 from net.braniumacademy.controller.subjectcontroller import SubjectController
 from net.braniumacademy.utils import *
@@ -87,7 +88,7 @@ class SubjectView:
         self.img_search = tk.PhotoImage(file=path)
         self.btn_search = ttk.Button(frm_search, text='Tìm kiếm',
                                      image=self.img_search, compound=tk.LEFT,
-                                     command=self.search, width=15)
+                                     command=self.btn_search_clicked, width=15)
         self.btn_search.grid(row=2, column=1, padx=4, pady=4)
 
     def create_sort_frame(self):
@@ -116,7 +117,7 @@ class SubjectView:
         ttk.Radiobutton(frm_sort, text='Theo loại môn học a-z',
                         value=5, variable=self.sort_var,
                         command=self.item_sort_by_category_selected). \
-            grid(row=1, column=1, pady=4, padx=4, sticky=tk.W)
+            grid(row=2, column=0, pady=4, padx=4, sticky=tk.W)
 
     def create_buttons(self):
         button_frame = ttk.LabelFrame(self.frame, text='Các thao tác')
@@ -131,7 +132,7 @@ class SubjectView:
                                      compound=tk.LEFT)
         self.btn_reload.grid(row=0, column=0, ipady=4, ipadx=4, pady=4, padx=4)
         self.img_edit = tk.PhotoImage(file='view/assets/editing.png')
-        self.btn_edit = ttk.Button(button_frame, text='Sửa điểm TB', width=20,
+        self.btn_edit = ttk.Button(button_frame, text='Sửa môn học', width=20,
                                    command=self.btn_edit_subject_clicked,
                                    image=self.img_edit, compound=tk.LEFT)
         self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=4)
@@ -170,29 +171,86 @@ class SubjectView:
     def create_subject(self):
         pass
 
-    def search(self):
-        pass
+    def btn_search_clicked(self):
+        key = self.search_entry.get()
+        criteria = self.search_var.get()
+        if len(key) == 0:
+            showerror('Invalid keyword', 'Please enter keyword first!')
+        elif len(criteria) == 0:
+            showerror('Invalid criteria', 'Please select criteria to search!')
+        else:
+            if criteria == search_subject_criterias[0]:
+                self.find_by_id(int(key))
+            elif criteria == search_subject_criterias[1]:
+                self.find_by_name(key)
+            elif criteria == search_subject_criterias[2]:
+                if is_credit_valid(key):
+                    self.find_by_credit(int(key))
+                else:
+                    showerror('Invalid credit', 'Credit must be integer number from 2 to 15')
+            elif criteria == search_subject_criterias[3]:
+                if is_date_valid(key):
+                    lesson = int(key)
+                    self.find_by_lesson(lesson)
+                else:
+                    showerror('Invalid lesson', 'Lesson must be integer number from 1 to 54')
+            elif criteria == search_subject_criterias[4]:
+                self.find_by_category(key)
 
     def item_sort_by_id_selected(self):
-        pass
+        self.controller.sort_by_subject_id(self.subjects)
+        self.show_subjects()
 
     def item_sort_by_name_selected(self):
-        pass
+        self.controller.sort_by_subject_name(self.subjects)
+        self.show_subjects()
 
     def item_sort_by_credit_selected(self):
-        pass
+        self.controller.sort_by_subject_credit(self.subjects)
+        self.show_subjects()
 
     def item_sort_by_lesson_selected(self):
-        pass
+        self.controller.sort_by_subject_lesson(self.subjects)
+        self.show_subjects()
 
     def item_sort_by_category_selected(self):
-        pass
+        self.controller.sort_by_subject_category(self.subjects)
+        self.show_subjects()
 
-    def item_search_by_subject_name_selected(self):
-        pass
+    def find_by_name(self, key: str):
+        self.load_subject(False)  # reload subject
+        result = self.controller.find_by_subject_name(self.subjects, key)
+        self.check_result(result)
 
-    def item_search_by_credit_selected(self):
-        pass
+    def find_by_credit(self, key: int):
+        self.load_subject(False)  # reload subject
+        result = self.controller.find_by_subject_credit(self.subjects, key)
+        self.check_result(result)
 
-    def item_search_by_category_selected(self):
-        pass
+    def find_by_lesson(self, key: int):
+        self.load_subject(False)  # reload subject
+        result = self.controller.find_by_subject_lesson(self.subjects, key)
+        self.check_result(result)
+
+    def find_by_category(self, key: str):
+        self.load_subject(False)  # reload subject
+        result = self.controller.find_by_subject_category(self.subjects, key)
+        self.check_result(result)
+
+    def find_by_id(self, key: int):
+        self.load_subject(False)  # reload subject
+        result = self.controller.find_by_subject_id(self.subjects, key)
+        if result is None:
+            self.check_result([])
+        else:
+            self.check_result([result])
+
+    def check_result(self, result: list[Subject]):
+        if len(result) == 0:
+            self.subjects.clear()
+            self.show_subjects()
+            showinfo('Search Result', 'No result found!')
+        else:
+            self.subjects.clear()
+            self.subjects = result.copy()
+            self.show_subjects()
