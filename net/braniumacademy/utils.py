@@ -41,6 +41,47 @@ majors = [
     'Quản trị nhân lực'
 ]
 
+subject_categories = [
+    'Cơ sở ngành',
+    'Chuyên ngành',
+    'Tự chọn',
+    'Cơ bản',
+    'Nâng cao'
+]
+
+
+def credit_options() -> []:
+    values = []
+    for i in range(15):
+        values.append(i + 1)
+    return values
+
+
+def find_credit_index(credit: int) -> int:
+    credits_ = credit_options()
+    for c in credits_:
+        if c == credit:
+            return c - 1
+    return -1
+
+
+def find_subject_index_by_id(subjects: list[Subject], subject_id: int) -> int:
+    index = 0
+    for sub in subjects:
+        if sub.subject_id == subject_id:
+            return index
+        index += 1
+    return -1
+
+
+def find_category_index(category: str) -> int:
+    index = 0
+    for cate in subject_categories:
+        if cate == category:
+            return index
+        index += 1
+    return -1
+
 
 def is_gpa_valid(gpa_str: str) -> bool:
     pattern = r'(\d+.\d+)|\d+|.\d+'

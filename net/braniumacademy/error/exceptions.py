@@ -36,3 +36,23 @@ class EmailError(Exception):
 
     def __str__(self):
         return f'EmailError: {self.__message}: {self.__invalid_email}'
+
+
+class SubjectLessonError(Exception):
+    def __init__(self, value, message='Invalid subject lesson'):
+        super(SubjectLessonError, self).__init__(value, message)
+        self.__invalid_lesson = value
+        self.__message = message
+
+    def __str__(self):
+        return f'EmailError: {self.__message}: {self.__invalid_lesson}'
+
+
+class SubjectCreditError(Exception):
+    def __init__(self, value, message='Invalid subject credit'):
+        super(SubjectCreditError, self).__init__(value, message)
+        self.__invalid_credit = value
+        self.__message = message
+
+    def __str__(self):
+        return f'EmailError: {self.__message}: {self.__invalid_credit}'

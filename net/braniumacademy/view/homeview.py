@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import ttk, Menu
+from tkinter.messagebox import showinfo
+
 from net.braniumacademy.view.addnewstudentview import AddNewStudentView
 from net.braniumacademy.view.registerview import RegisterView
 from net.braniumacademy.view.studentview import StudentView
-from net.braniumacademy.view.subjectview import SubjectView
+from net.braniumacademy.view.subjectview import SubjectView, AddNewSubjectView
 
 
 class HomeView(tk.Tk):
@@ -87,9 +89,13 @@ class HomeView(tk.Tk):
 
     def save(self):
         self.student_view.item_save_selected()
+        self.subject_view.item_save_selected()
+        showinfo('Successfully', 'Save data to file successfully!')
 
     def create_subject(self):
-        pass
+        popup = AddNewSubjectView(self.subject_view)
+        popup.attributes('-topmost', True)
+        popup.mainloop()
 
     def create_register(self):
         pass

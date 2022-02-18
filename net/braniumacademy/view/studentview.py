@@ -99,7 +99,7 @@ class StudentView:
         self.img_search = tk.PhotoImage(file=path)
         self.btn_search = ttk.Button(frm_search, text='Tìm kiếm',
                                      image=self.img_search, compound=tk.LEFT,
-                                     command=self.search, width=15)
+                                     command=self.btn_search_clicked, width=15)
         self.btn_search.grid(row=2, column=1, padx=4, pady=4)
 
     def create_sort_frame(self):
@@ -227,7 +227,6 @@ class StudentView:
 
     def item_save_selected(self):
         self.controller.write_file(STUDENT_FILE_NAME, students=self.students)
-        showinfo('Successfully', 'Save students data to file successfully!')
 
     def draw_chart(self):
         caps, stat = self.controller.statistic_capacity(self.students)
@@ -243,7 +242,7 @@ class StudentView:
         plt.legend(loc='lower right', title='Học lực:', bbox_to_anchor=(1.25, 0))
         plt.show()
 
-    def search(self):
+    def btn_search_clicked(self):
         key = self.search_entry.get()
         criteria = self.search_var.get()
         if len(key) == 0:

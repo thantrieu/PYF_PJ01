@@ -17,7 +17,7 @@
     "subject_id": 1002,
     "subject_name": "Ngôn ngữ lập trình C",
     "subject_credit": 2,
-    "subject_lesson": 24,
+    "subject_lesson": 25,
     "subject_category": "Cơ bản"
   },
   {
@@ -37,9 +37,9 @@
   {
     "subject_id": 1005,
     "subject_name": "Lập trình iOS",
-    "subject_credit": 4,
-    "subject_lesson": 45,
-    "subject_category": "Nâng cao"
+    "subject_credit": 3,
+    "subject_lesson": 42,
+    "subject_category": "Chuyên ngành"
   },
   {
     "subject_id": 1006,
@@ -68,5 +68,26 @@
     "subject_credit": 3,
     "subject_lesson": 36,
     "subject_category": "Chuyên ngành"
+  },
+  {
+    "subject_id": 1010,
+    "subject_name": "Cơ sở dữ liệu phân tán",
+    "subject_credit": 4,
+    "subject_lesson": 46,
+    "subject_category": "Cơ sở ngành ngành"
+  },
+  {
+    "subject_id": 1011,
+    "subject_name": "Lập trình hướng đối tượng Java",
+    "subject_credit": 4,
+    "subject_lesson": 46,
+    "subject_category": "Cơ bản"
+  },
+  {
+    "subject_id": 1012,
+    "subject_name": "SQL",
+    "subject_credit": 3,
+    "subject_lesson": 32,
+    "subject_category": "Cơ sở ngành"
   }
 ]

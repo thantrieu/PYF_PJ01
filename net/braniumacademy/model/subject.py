@@ -51,3 +51,12 @@ class Subject:
     @subject_lesson.setter
     def subject_lesson(self, value):
         self.__lesson = value
+
+    def to_dict(self):
+        return {
+            "subject_id": self.subject_id,
+            "subject_name": self.subject_name,
+            "subject_credit": self.subject_credit,
+            "subject_lesson": self.subject_lesson,
+            "subject_category": self.subject_category
+        }

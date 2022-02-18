@@ -10,6 +10,11 @@ from net.braniumacademy.utils import STUDENT_FILE_NAME, find_student_index_by_id
 class EditStudentView(tkinter.Tk):
     def __init__(self, master, student):
         super(EditStudentView, self).__init__()
+        self.btn_save = None
+        self.btn_cancel = None
+        self.entry_gpa = None
+        self.entry_full_name = None
+        self.entry_student_id = None
         self.master = master
         self.student = student
         self.resizable(False, False)
