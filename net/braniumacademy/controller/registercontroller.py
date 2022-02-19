@@ -89,7 +89,13 @@ class RegisterController(IRegisterController):
                 break
 
     def remove(self, registers: list[Register], reg_id: int) -> bool:
-        pass
+        index = 0
+        for subject in registers:
+            if subject.register_id == reg_id:
+                registers.pop(index)
+                return True
+            index += 1
+        return False
 
     def add_register(self, reg_id: int, subject: Subject,
                      student: Student) -> Register:
@@ -127,7 +133,10 @@ class RegisterController(IRegisterController):
         pass
 
     def write_file(self, file_name: str, registers: list[Register]):
-        pass
+        with open(file_name, 'w', encoding='UTF-8') as writer:
+            encoded_data = json.dumps(registers, cls=RegisterJSONEncoder,
+                                      indent=2, ensure_ascii=False)
+            writer.write(encoded_data)
 
     def read_file(self, file_name: str, students: list[Student],
                   subjects: list[Subject]) -> list[Register | Register, ...]:
@@ -145,6 +154,6 @@ class RegisterController(IRegisterController):
         Register.AUTO_ID = student_id + 1
 
 
-class StudentJSONEncoder(json.JSONEncoder):
+class RegisterJSONEncoder(json.JSONEncoder):
     def default(self, o):
-        return o.__dict__
+        return o.to_dict()

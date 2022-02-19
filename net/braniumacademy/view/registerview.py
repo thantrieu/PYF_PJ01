@@ -159,15 +159,16 @@ class RegisterView:
         self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=4)
         self.img_remove = tk.PhotoImage(file='view/assets/remove.png')
         self.btn_remove = ttk.Button(button_frame, text='Xóa bỏ', width=20,
-                                     command=self.btn_remove_subject_clicked,
+                                     command=self.btn_remove_clicked,
                                      image=self.img_remove, compound=tk.LEFT)
         self.btn_remove.grid(row=0, column=2, ipadx=4, ipady=4, pady=4, padx=4)
 
     def load_data(self, should_show=True):
         self.subjects.clear()
         self.students.clear()
-        self.students = StudentController().read_file(STUDENT_FILE_NAME)
-        self.subjects = SubjectController().read_file(SUBJECT_FILE_NAME)
+        if len(self.subjects) == 0:
+            self.students = StudentController().read_file(STUDENT_FILE_NAME)
+            self.subjects = SubjectController().read_file(SUBJECT_FILE_NAME)
         self.registers = self.controller.read_file(REGISTER_FILE_NAME, self.students, self.subjects)
         if should_show:
             self.show_registers()
@@ -192,8 +193,8 @@ class RegisterView:
     def btn_draw_chart_clicked(self):
         pass
 
-    def btn_remove_subject_clicked(self):
-        subjects = self.controller.read_file(SUBJECT_FILE_NAME)
+    def btn_remove_clicked(self):
+        registers = self.controller.read_file(REGISTER_FILE_NAME, self.students, self.subjects)
         item_selected = self.tbl_register.selection()
         if len(item_selected) > 0:
             title = 'Confirmation'
@@ -201,30 +202,30 @@ class RegisterView:
             ans = askyesno(title, message)
             if ans:
                 index = int(item_selected[0])
-                subject_id = self.subjects[index].subject_id
-                self.controller.remove(self.subjects, subject_id)  # xóa phần tử trong danh sách sinh viên
-                self.controller.remove(subjects, subject_id)  # xóa phần tử trong danh sách nguyên bản
+                register_id = self.registers[index].register_id
+                self.controller.remove(self.registers, register_id)  # xóa phần tử trong danh sách sinh viên
+                self.controller.remove(registers, register_id)  # xóa phần tử trong danh sách nguyên bản
                 self.tbl_register.delete(item_selected[0])  # xóa phần tử trong bảng
-                self.controller.write_file(SUBJECT_FILE_NAME, subjects)  # update file
-                showinfo(title='Infomation', message=f'Delete subject id "{subject_id}" successfully!')
+                self.controller.write_file(REGISTER_FILE_NAME, registers)  # update file
+                showinfo(title='Infomation', message=f'Delete register id "{register_id}" successfully!')
         else:
-            showerror(title='Error', message='Please select a subject to delete first!')
+            showerror(title='Error', message='Please select a register to delete first!')
 
     def btn_edit_subject_clicked(self):
         item_selected = self.tbl_register.selection()
         if len(item_selected) > 0:
             index = int(item_selected[0])  # convert iid from str to int
-            # EditSubjectView(self, self.subjects[index]).attributes('-topmost', True)
+            # EditSubjectView(self, self.registers[index]).attributes('-topmost', True)
         else:
             showerror(title='Error', message='Please select a subject to edit first!')
         pass
 
-    def create_subject(self, subject: Subject):
-        self.subjects.append(subject)
+    def create_register(self, subject: Subject):
+        self.registers.append(subject)
         self.show_registers()
 
     def item_save_selected(self):
-        self.controller.write_file(REGISTER_FILE_NAME, self.subjects)
+        self.controller.write_file(REGISTER_FILE_NAME, self.registers)
 
     def btn_search_clicked(self):
         key = self.search_entry.get()

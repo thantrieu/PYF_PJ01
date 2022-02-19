@@ -42,3 +42,11 @@ class Register:
     @register_time.setter
     def register_time(self, value):
         self.__register_time = value
+
+    def to_dict(self):
+        return {
+            "reg_id": self.register_id,
+            "subject_id": self.subject.subject_id,
+            "student_id": self.student.student_id,
+            "reg_time": self.register_time.strftime('%d/%m/%Y %H:%M:%S')
+        }

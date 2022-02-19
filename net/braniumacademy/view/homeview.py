@@ -88,6 +88,7 @@ class HomeView(tk.Tk):
     def save(self):
         self.student_view.item_save_selected()
         self.subject_view.item_save_selected()
+        self.register_view.item_save_selected()
         showinfo('Successfully', 'Save data to file successfully!')
 
     def create_subject(self):
