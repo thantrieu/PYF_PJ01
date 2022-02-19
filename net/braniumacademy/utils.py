@@ -163,7 +163,7 @@ def register_to_tuple(register: Register) -> tuple[str | str, ...]:
     return tuple([register.register_id, register.subject.subject_id,
                   register.subject.subject_name, register.student.student_id,
                   register.student.full_name,
-                  datetime.strftime(register.register_time, '%d/%m/%Y %H:%M%S')])
+                  datetime.strftime(register.register_time, '%d/%m/%Y %H:%M:%S')])
 
 
 def clear_treeview(treeview):
@@ -229,6 +229,10 @@ def delta_time(tm):
     birth_date = datetime.strptime(tm.__str__(), '%d/%m/%Y')
     total_sec = (birth_date - datetime.strptime('01/01/1970', '%d/%m/%Y')).total_seconds()
     return total_sec
+
+
+def register_delta_time(tm):
+    return (tm - datetime.strptime('01/01/1970', '%d/%m/%Y')).total_seconds()
 
 
 def create_full_name(fname: str) -> FullName:

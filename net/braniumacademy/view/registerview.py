@@ -104,19 +104,19 @@ class RegisterView:
         # add radio button to this frame
         ttk.Radiobutton(frm_sort, text='Thứ tự đăng ký sớm-muộn', value=1,
                         variable=self.sort_var,
-                        command=self.item_sort_by_id_selected). \
+                        command=self.item_sort_by_register_time_asc). \
             grid(row=0, column=0, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Thứ tự đăng ký muộn-sớm',
                         value=2, variable=self.sort_var,
-                        command=self.item_sort_by_name_selected). \
+                        command=self.item_sort_by_register_time_desc). \
             grid(row=1, column=0, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo mã môn học tăng dần',
                         value=3, variable=self.sort_var,
-                        command=self.item_sort_by_credit_selected). \
+                        command=self.item_sort_by_subject_id_selected). \
             grid(row=0, column=1, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo mã sinh viên tăng dần',
                         value=4, variable=self.sort_var,
-                        command=self.item_sort_by_lesson_selected). \
+                        command=self.item_sort_by_student_id_selected). \
             grid(row=1, column=1, pady=4, padx=4, sticky=tk.W)
 
     def create_statistic_frame(self):
@@ -253,24 +253,20 @@ class RegisterView:
             elif criteria == search_subject_criterias[4]:
                 self.find_by_category(key)
 
-    def item_sort_by_id_selected(self):
-        self.controller.sort_by_subject_id(self.subjects)
+    def item_sort_by_register_time_asc(self):
+        self.controller.sort_by_register_time_asc(self.registers)
         self.show_registers()
 
-    def item_sort_by_name_selected(self):
-        # self.controller.sort_by_subject_name(self.subjects)
+    def item_sort_by_register_time_desc(self):
+        self.controller.sort_by_register_time_desc(self.registers)
         self.show_registers()
 
-    def item_sort_by_credit_selected(self):
-        # self.controller.sort_by_subject_credit(self.subjects)
+    def item_sort_by_subject_id_selected(self):
+        self.controller.sort_by_subject_id(self.registers)
         self.show_registers()
 
-    def item_sort_by_lesson_selected(self):
-        # self.controller.sort_by_subject_lesson(self.subjects)
-        self.show_registers()
-
-    def item_sort_by_category_selected(self):
-        # self.controller.sort_by_subject_category(self.subjects)
+    def item_sort_by_student_id_selected(self):
+        self.controller.sort_by_student_id(self.registers)
         self.show_registers()
 
     def find_by_name(self, key: str):

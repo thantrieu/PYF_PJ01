@@ -1,11 +1,12 @@
 import abc
+import datetime
 import json
 from abc import abstractmethod
 
 from net.braniumacademy.model.register import Register
 from net.braniumacademy.model.student import Student
 from net.braniumacademy.model.subject import Subject
-from net.braniumacademy.utils import decode_register
+from net.braniumacademy.utils import decode_register, register_delta_time
 
 
 class IRegisterController(abc.ABC):
@@ -95,16 +96,16 @@ class RegisterController(IRegisterController):
         pass
 
     def sort_by_register_time_asc(self, registers: list[Register]):
-        pass
+        registers.sort(key=lambda x: register_delta_time(x.register_time))
 
     def sort_by_register_time_desc(self, registers: list[Register]):
-        pass
+        registers.sort(key=lambda x: register_delta_time(x.register_time), reverse=True)
 
     def sort_by_subject_id(self, registers: list[Register]):
-        pass
+        registers.sort(key=lambda x: x.subject.subject_id)
 
     def sort_by_student_id(self, registers: list[Register]):
-        pass
+        registers.sort(key=lambda x: x.student.student_id)
 
     def search_by_student_id(self, registers: list[Register],
                              student_id: str) -> list[Register | Register, ...]:
