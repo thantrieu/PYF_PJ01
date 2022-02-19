@@ -49,13 +49,13 @@ class IRegisterController(abc.ABC):
         pass
 
     @abstractmethod
-    def search_by_student_id(self, registers: list[Register],
-                             student_id: str) -> list[Register | Register, ...]:
+    def find_by_student_id(self, registers: list[Register],
+                           student_id: str) -> list[Register | Register, ...]:
         pass
 
     @abstractmethod
-    def search_by_subject_id(self, registers: list[Register],
-                             student_id: str) -> list[Register | Register, ...]:
+    def find_by_subject_id(self, registers: list[Register],
+                           subject_id: int) -> list[Register | Register, ...]:
         pass
 
     @abstractmethod
@@ -107,13 +107,21 @@ class RegisterController(IRegisterController):
     def sort_by_student_id(self, registers: list[Register]):
         registers.sort(key=lambda x: x.student.student_id)
 
-    def search_by_student_id(self, registers: list[Register],
-                             student_id: str) -> list[Register | Register, ...]:
-        pass
+    def find_by_student_id(self, registers: list[Register],
+                           student_id: str) -> list[Register | Register, ...]:
+        result = []
+        for reg in registers:
+            if reg.student.student_id == student_id.upper():
+                result.append(reg)
+        return result
 
-    def search_by_subject_id(self, registers: list[Register],
-                             student_id: str) -> list[Register | Register, ...]:
-        pass
+    def find_by_subject_id(self, registers: list[Register],
+                           subject_id: int) -> list[Register | Register, ...]:
+        result = []
+        for reg in registers:
+            if reg.subject.subject_id == subject_id:
+                result.append(reg)
+        return result
 
     def statistic(self):
         pass

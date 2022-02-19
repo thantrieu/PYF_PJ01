@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter.messagebox import showerror, showinfo, askyesno
 
 from net.braniumacademy.controller.registercontroller import RegisterController
@@ -235,23 +234,16 @@ class RegisterView:
         elif len(criteria) == 0:
             showerror('Invalid criteria', 'Please select criteria to search!')
         else:
-            if criteria == search_subject_criterias[0]:
-                self.find_by_id(int(key))
-            elif criteria == search_subject_criterias[1]:
-                self.find_by_name(key)
-            elif criteria == search_subject_criterias[2]:
-                if is_credit_valid(key):
-                    self.find_by_credit(int(key))
+            if criteria == search_register_criterias[0]:
+                if is_student_id_valid(key):
+                    self.find_by_student_id(key)
                 else:
-                    showerror('Invalid credit', 'Credit must be integer number from 2 to 15')
-            elif criteria == search_subject_criterias[3]:
-                if is_date_valid(key):
-                    lesson = int(key)
-                    self.find_by_lesson(lesson)
+                    showerror('Invalid student id', 'Student id must in the form SV####')
+            elif criteria == search_register_criterias[1]:
+                if is_subject_id_valid(key):
+                    self.find_by_subject_id(int(key))
                 else:
-                    showerror('Invalid lesson', 'Lesson must be integer number from 1 to 54')
-            elif criteria == search_subject_criterias[4]:
-                self.find_by_category(key)
+                    showerror('Invalid subject_id', 'Subject id must be integer number 4 digits')
 
     def item_sort_by_register_time_asc(self):
         self.controller.sort_by_register_time_asc(self.registers)
@@ -269,40 +261,22 @@ class RegisterView:
         self.controller.sort_by_student_id(self.registers)
         self.show_registers()
 
-    def find_by_name(self, key: str):
-        self.load_data(False)  # reload subject
-        # result = self.controller.find_by_subject_name(self.subjects, key)
-        # self.check_result(result)
+    def find_by_student_id(self, key: str):
+        self.load_data(False)  # reload data from file
+        result = self.controller.find_by_student_id(self.registers, key)
+        self.check_result(result)
 
-    def find_by_credit(self, key: int):
+    def find_by_subject_id(self, key: int):
         self.load_data(False)  # reload subject
-        # result = self.controller.find_by_subject_credit(self.subjects, key)
-        # self.check_result(result)
+        result = self.controller.find_by_subject_id(self.registers, key)
+        self.check_result(result)
 
-    def find_by_lesson(self, key: int):
-        self.load_data(False)  # reload subject
-        # result = self.controller.find_by_subject_lesson(self.subjects, key)
-        # self.check_result(result)
-
-    def find_by_category(self, key: str):
-        self.load_data(False)  # reload subject
-        # result = self.controller.find_by_subject_category(self.subjects, key)
-        # self.check_result(result)
-
-    def find_by_id(self, key: int):
-        self.load_data(False)  # reload subject
-        # result = self.controller.find_by_subject_id(self.subjects, key)
-        # if result is None:
-        #     self.check_result([])
-        # else:
-        #     self.check_result([result])
-
-    def check_result(self, result: list[Subject]):
+    def check_result(self, result: list[Register]):
         if len(result) == 0:
-            self.subjects.clear()
+            self.registers.clear()
             self.show_registers()
             showinfo('Search Result', 'No result found!')
         else:
-            self.subjects.clear()
-            self.subjects = result.copy()
+            self.registers.clear()
+            self.registers = result.copy()
             self.show_registers()

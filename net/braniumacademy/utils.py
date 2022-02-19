@@ -122,6 +122,24 @@ def is_credit_valid(credit: str) -> bool:
         return True
 
 
+def is_student_id_valid(student_id: str):
+    pattern = r'SV[1-9]{1}\d{3}'
+    matcher = re.search(pattern, student_id, flags=re.IGNORECASE)
+    if matcher:
+        return True
+    else:
+        return False
+
+
+def is_subject_id_valid(subject_id: str):
+    pattern = r'\d{4}'
+    matcher = re.search(pattern, subject_id)
+    if matcher:
+        return True
+    else:
+        return False
+
+
 def is_date_valid(input_str: str) -> bool:
     pattern = r'\d+'
     if re.search(pattern, input_str):
