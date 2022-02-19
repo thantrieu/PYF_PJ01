@@ -1,6 +1,9 @@
 import re
 from datetime import datetime
+from tkinter.ttk import Treeview
+from tkinter import ttk
 
+from net.braniumacademy.model.register import Register
 from net.braniumacademy.model.student import Student, BirthDate, FullName, Address
 from net.braniumacademy.model.subject import Subject
 
@@ -48,6 +51,22 @@ subject_categories = [
     'Cơ bản',
     'Nâng cao'
 ]
+
+search_register_criterias = [
+    'Tìm theo mã sinh viên',
+    'Tìm theo mã môn học'
+]
+
+
+def set_style(tbl: Treeview, theme: str = 'default'):
+    style = ttk.Style()
+    style.theme_use(theme)  # other theme can use: clam, classic, default
+    style.configure('my.Treeview.Heading', font=('Calibri', 11, 'bold'),
+                    background='#6caf50', foreground='#ffffff')
+    tbl.configure(style='my.Treeview')
+    # customize style for odd and even row background color
+    tbl.tag_configure('odd', background='#f0f0f0')
+    tbl.tag_configure('even', background='#ffffff')
 
 
 def credit_options() -> []:
@@ -140,6 +159,13 @@ def subject_to_tuple(subject: Subject) -> tuple[str | str, ...]:
                   subject.subject_category])
 
 
+def register_to_tuple(register: Register) -> tuple[str | str, ...]:
+    return tuple([register.register_id, register.subject.subject_id,
+                  register.subject.subject_name, register.student.student_id,
+                  register.student.full_name,
+                  datetime.strftime(register.register_time, '%d/%m/%Y %H:%M%S')])
+
+
 def clear_treeview(treeview):
     """ Hàm tiện ích dùng để xóa toàn bộ bản ghi trong bảng(treeview)
         trước khi hiển thị thông tin mới vào đó nhằm tránh trùng lặp các bản ghi.
@@ -184,6 +210,17 @@ def decode_student(dct):
         major = dct['major']
         gpa = float(dct['gpa'])
         return Student(pid, full_name, birth_date, sid, email, address, gpa, major)
+    else:
+        return dct
+
+
+def decode_register(dct):
+    if 'reg_id' in dct:
+        reg_id = int(dct['reg_id'])
+        subject_id = int(dct['subject_id'])
+        student_id = dct['student_id']
+        reg_time = datetime.strptime(dct['reg_time'], '%d/%m/%Y %H:%M:%S')
+        return Register(reg_id, student_id, subject_id, reg_time)
     else:
         return dct
 

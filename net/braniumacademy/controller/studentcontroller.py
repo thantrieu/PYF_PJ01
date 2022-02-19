@@ -1,10 +1,8 @@
 import abc
 import json
-import re
 from abc import abstractmethod
 from tkinter.messagebox import showerror
 
-from net.braniumacademy.model.student import Student
 from net.braniumacademy.error.exceptions import *
 from net.braniumacademy.utils import *
 

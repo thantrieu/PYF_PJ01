@@ -1,6 +1,12 @@
 class Register:
+    AUTO_ID = 1000
+
     def __init__(self, reg_id=0, student=None, subject=None, reg_time=None):
-        self.__register_id = reg_id
+        if reg_id != 0:
+            self.__register_id = reg_id
+        else:
+            self.__register_id = Register.AUTO_ID
+            Register.AUTO_ID += 1
         self.__student = student
         self.__subject = subject
         self.__register_time = reg_time

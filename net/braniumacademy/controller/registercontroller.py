@@ -1,13 +1,139 @@
 import abc
 import json
+from abc import abstractmethod
+
+from net.braniumacademy.model.register import Register
+from net.braniumacademy.model.student import Student
+from net.braniumacademy.model.subject import Subject
+from net.braniumacademy.utils import decode_register
 
 
 class IRegisterController(abc.ABC):
-    pass
+    @abstractmethod
+    def write_file(self, file_name: str, registers: list[Register]):
+        pass
+
+    @abstractmethod
+    def read_file(self, file_name: str, students: list[Student],
+                  subjects: list[Subject]) -> list[Register | Register, ...]:
+        pass
+
+    @abstractmethod
+    def remove(self, registers: list[Register], reg_id: int) -> bool:
+        pass
+
+    @abstractmethod
+    def add_register(self, reg_id: int, subject: Subject,
+                     student: Student) -> Register:
+        pass
+
+    @abstractmethod
+    def update_register_id(self, student_id):
+        pass
+
+    @abstractmethod
+    def sort_by_register_time_asc(self, registers: list[Register]):
+        pass
+
+    @abstractmethod
+    def sort_by_register_time_desc(self, registers: list[Register]):
+        pass
+
+    @abstractmethod
+    def sort_by_subject_id(self, registers: list[Register]):
+        pass
+
+    @abstractmethod
+    def sort_by_student_id(self, registers: list[Register]):
+        pass
+
+    @abstractmethod
+    def search_by_student_id(self, registers: list[Register],
+                             student_id: str) -> list[Register | Register, ...]:
+        pass
+
+    @abstractmethod
+    def search_by_subject_id(self, registers: list[Register],
+                             student_id: str) -> list[Register | Register, ...]:
+        pass
+
+    @abstractmethod
+    def statistic(self):
+        pass
+
+    @abstractmethod
+    def updat_register_subject(self, reg: Register,
+                               subjects: list[Subject], subject_id: int):
+        pass
+
+    @abstractmethod
+    def updat_register_student(self, reg: Register,
+                               students: list[Student], student_id: str):
+        pass
 
 
 class RegisterController(IRegisterController):
-    pass
+    def updat_register_subject(self, reg: Register,
+                               subjects: list[Subject], subject_id: int):
+        for subject in subjects:
+            if subject.subject_id == subject_id:
+                reg.subject = subject
+                break
+
+    def updat_register_student(self, reg: Register,
+                               students: list[Student], student_id: str):
+        for student in students:
+            if student.student_id == student_id:
+                reg.student = student
+                break
+
+    def remove(self, registers: list[Register], reg_id: int) -> bool:
+        pass
+
+    def add_register(self, reg_id: int, subject: Subject,
+                     student: Student) -> Register:
+        pass
+
+    def sort_by_register_time_asc(self, registers: list[Register]):
+        pass
+
+    def sort_by_register_time_desc(self, registers: list[Register]):
+        pass
+
+    def sort_by_subject_id(self, registers: list[Register]):
+        pass
+
+    def sort_by_student_id(self, registers: list[Register]):
+        pass
+
+    def search_by_student_id(self, registers: list[Register],
+                             student_id: str) -> list[Register | Register, ...]:
+        pass
+
+    def search_by_subject_id(self, registers: list[Register],
+                             student_id: str) -> list[Register | Register, ...]:
+        pass
+
+    def statistic(self):
+        pass
+
+    def write_file(self, file_name: str, registers: list[Register]):
+        pass
+
+    def read_file(self, file_name: str, students: list[Student],
+                  subjects: list[Subject]) -> list[Register | Register, ...]:
+        with open(file_name, encoding='UTF-8') as reader:
+            data = reader.read()
+            registers = json.loads(data, object_hook=decode_register)
+        for reg in registers:
+            self.updat_register_subject(reg, subjects, reg.subject)
+            self.updat_register_student(reg, students, reg.student)
+        registers.sort(key=lambda x: x.register_id)
+        self.update_register_id(registers[len(registers) - 1].register_id)
+        return registers
+
+    def update_register_id(self, student_id):
+        Register.AUTO_ID = student_id + 1
 
 
 class StudentJSONEncoder(json.JSONEncoder):

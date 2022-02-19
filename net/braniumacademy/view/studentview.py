@@ -38,14 +38,8 @@ class StudentView:
                                         show='headings', height=10)
         self.tbl_student.grid(row=0, column=0, columnspan=3,
                               sticky=tk.NSEW, pady=4, padx=4)
-        style = ttk.Style()
-        style.theme_use('default')  # other theme can use: clam, classic, default
-        style.configure('my.Treeview.Heading', font=('Calibri', 11, 'bold'),
-                        background='#6caf50', foreground='#ffffff')
-        self.tbl_student.configure(style='my.Treeview')
-        # customize style for odd and even row background color
-        self.tbl_student.tag_configure('odd', background='#f0f0f0')
-        self.tbl_student.tag_configure('even', background='#ffffff')
+        # set style for the view
+        set_style(self.tbl_student)
         # show heading
         self.tbl_student.heading('id', text='CMND/CCCD')
         self.tbl_student.heading('full_name', text='Họ và tên')

@@ -35,15 +35,8 @@ class SubjectView:
         self.tbl_subject = ttk.Treeview(self.frame, columns=columns,
                                         show='headings', height=10)
         self.tbl_subject.grid(row=0, column=0, columnspan=3,
-                              sticky=tk.NSEW, pady=4, padx=16)
-        style = ttk.Style()
-        style.theme_use('default')  # other theme can use: clam, classic, default
-        style.configure('my.Treeview.Heading', font=('Calibri', 11, 'bold'),
-                        background='#6caf50', foreground='#ffffff')
-        self.tbl_subject.configure(style='my.Treeview')
-        # customize style for odd and even row background color
-        self.tbl_subject.tag_configure('odd', background='#f0f0f0')
-        self.tbl_subject.tag_configure('even', background='#ffffff')
+                              sticky=tk.NSEW, pady=4, padx=4)
+        set_style(self.tbl_subject)
         # show heading
         self.tbl_subject.heading('subject_id', text='Mã môn học')
         self.tbl_subject.heading('subject_name', text='Tên môn học')
@@ -71,10 +64,10 @@ class SubjectView:
         # config set all columns have same width space
         frm_search.columnconfigure(0, weight=1, uniform='fred')
         frm_search.columnconfigure(1, weight=1, uniform='fred')
-        frm_search.grid(row=1, column=0, sticky=tk.NSEW, pady=4, padx=16)
+        frm_search.grid(row=1, column=0, sticky=tk.NSEW, pady=4, padx=4)
         # add combobox
         ttk.Label(frm_search, text='Tiêu chí tìm kiếm:'). \
-            grid(row=0, column=0, sticky=tk.W, pady=4, padx=16)
+            grid(row=0, column=0, sticky=tk.W, pady=4, padx=4)
         ttk.Combobox(frm_search, values=search_subject_criterias,
                      textvariable=self.search_var). \
             grid(row=1, column=0, padx=16, pady=4, sticky=tk.W,
@@ -83,42 +76,42 @@ class SubjectView:
         ttk.Label(frm_search, text='Từ khóa:'). \
             grid(row=0, column=1, sticky=tk.W, padx=16, pady=4)
         self.search_entry = ttk.Entry(frm_search)
-        self.search_entry.grid(row=1, column=1, sticky=tk.EW, padx=16, pady=4,
+        self.search_entry.grid(row=1, column=1, sticky=tk.EW, padx=4, pady=4,
                                ipadx=16, ipady=4)
         path = 'view/assets/search_24.png'
         self.img_search = tk.PhotoImage(file=path)
         self.btn_search = ttk.Button(frm_search, text='Tìm kiếm',
                                      image=self.img_search, compound=tk.LEFT,
                                      command=self.btn_search_clicked, width=15)
-        self.btn_search.grid(row=2, column=1, padx=16, pady=4)
+        self.btn_search.grid(row=2, column=1, padx=4, pady=4)
 
     def create_sort_frame(self):
         self.sort_var = tk.IntVar(value=0)
         frm_sort = ttk.LabelFrame(self.frame, text='Sắp xếp')
         frm_sort.columnconfigure(0, weight=1, uniform='fred')
         frm_sort.columnconfigure(1, weight=1, uniform='fred')
-        frm_sort.grid(row=1, column=1, sticky=tk.NSEW, pady=4, padx=16)
+        frm_sort.grid(row=1, column=1, sticky=tk.NSEW, pady=4, padx=4)
         # add radio button to this frame
         ttk.Radiobutton(frm_sort, text='Theo mã môn học a-z', value=1,
                         variable=self.sort_var,
                         command=self.item_sort_by_id_selected). \
-            grid(row=0, column=0, pady=4, padx=16, sticky=tk.W)
+            grid(row=0, column=0, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo tên môn học a-z',
                         value=2, variable=self.sort_var,
                         command=self.item_sort_by_name_selected). \
-            grid(row=1, column=0, pady=4, padx=16, sticky=tk.W)
+            grid(row=1, column=0, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo số tín chỉ giảm dần',
                         value=3, variable=self.sort_var,
                         command=self.item_sort_by_credit_selected). \
-            grid(row=0, column=1, pady=4, padx=16, sticky=tk.W)
+            grid(row=0, column=1, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo số tiết học tăng dần',
                         value=4, variable=self.sort_var,
                         command=self.item_sort_by_lesson_selected). \
-            grid(row=1, column=1, pady=4, padx=16, sticky=tk.W)
+            grid(row=1, column=1, pady=4, padx=4, sticky=tk.W)
         ttk.Radiobutton(frm_sort, text='Theo loại môn học a-z',
                         value=5, variable=self.sort_var,
                         command=self.item_sort_by_category_selected). \
-            grid(row=2, column=0, pady=4, padx=16, sticky=tk.W)
+            grid(row=2, column=0, pady=4, padx=4, sticky=tk.W)
 
     def create_buttons(self):
         button_frame = ttk.LabelFrame(self.frame, text='Các thao tác')
@@ -131,17 +124,17 @@ class SubjectView:
         self.btn_reload = ttk.Button(button_frame, text='Làm mới', width=20,
                                      command=self.load_subject, image=self.img_refresh,
                                      compound=tk.LEFT)
-        self.btn_reload.grid(row=0, column=0, ipady=4, ipadx=16, pady=4, padx=16)
+        self.btn_reload.grid(row=0, column=0, ipady=4, ipadx=16, pady=4, padx=4)
         self.img_edit = tk.PhotoImage(file='view/assets/editing.png')
         self.btn_edit = ttk.Button(button_frame, text='Sửa môn học', width=20,
                                    command=self.btn_edit_subject_clicked,
                                    image=self.img_edit, compound=tk.LEFT)
-        self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=16, pady=4, padx=16)
+        self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=16)
         self.img_remove = tk.PhotoImage(file='view/assets/remove.png')
         self.btn_remove = ttk.Button(button_frame, text='Xóa bỏ', width=20,
                                      command=self.btn_remove_subject_clicked,
                                      image=self.img_remove, compound=tk.LEFT)
-        self.btn_remove.grid(row=0, column=2, ipadx=16, ipady=4, pady=4, padx=16)
+        self.btn_remove.grid(row=0, column=2, ipadx=4, ipady=4, pady=4, padx=16)
 
     def load_subject(self, should_show=True):
         self.subjects.clear()

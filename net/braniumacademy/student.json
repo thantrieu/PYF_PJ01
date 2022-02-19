@@ -1,4 +1,26 @@
 [
+    {
+    "person_id": "01234567990",
+    "full_name": {
+      "first": "Phong",
+      "last": "Nguyễn",
+      "mid": "Khắc"
+    },
+    "birth_date": {
+      "day": 12,
+      "month": 8,
+      "year": 2005
+    },
+    "address": {
+      "wards": "Chùa Bộc",
+      "district": "Ba Đình",
+      "city": "Hà Nội"
+    },
+    "student_id": "SV1000",
+    "email": "phongkhac@xmail.com",
+    "major": "Quản trị nhân lực",
+    "gpa": 3.68
+  },
   {
     "person_id": "01234567890",
     "full_name": {

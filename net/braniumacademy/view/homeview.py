@@ -45,11 +45,9 @@ class HomeView(tk.Tk):
         self.frm_subject.grid(row=0, column=0)
         # add register frame
         self.frm_register = ttk.Frame(notebook)
-        self.frm_register.rowconfigure(0, weight=4)
-        self.frm_register.rowconfigure(1, weight=1)
-        self.frm_register.columnconfigure(0, weight=1)
-        self.frm_register.columnconfigure(1, weight=1)
-        self.frm_register.columnconfigure(2, weight=1)
+        self.frm_register.columnconfigure(0, weight=1, uniform='fred')
+        self.frm_register.columnconfigure(1, weight=1, uniform='fred')
+        self.frm_register.columnconfigure(2, weight=1, uniform='fred')
         self.frm_register.grid(row=0, column=0)
         # add frame to notebook
         notebook.add(self.frm_student, text='Student Managerment')
