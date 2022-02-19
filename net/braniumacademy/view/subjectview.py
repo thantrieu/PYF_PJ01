@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter.messagebox import showerror, showinfo, askyesno
 
 from net.braniumacademy.controller.subjectcontroller import SubjectController

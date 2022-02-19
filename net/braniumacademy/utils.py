@@ -161,6 +161,13 @@ def capacity(gpa: float) -> str:
         return 'Yếu'
 
 
+def get_subject_id(subjects: list[Subject]) -> list[str | str, ...]:
+    result = []
+    for subject in subjects:
+        result.append(f'{subject.subject_id}')
+    return result
+
+
 def student_to_tuple(student: Student) -> tuple[str | str, ...]:
     """ Hàm tiện ích thực hiện chuyển đổi thông tin sinh viên thành một
         tuple chứa các phần tử biểu diễn ở string.

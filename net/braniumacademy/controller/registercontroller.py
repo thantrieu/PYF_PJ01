@@ -11,6 +11,21 @@ from net.braniumacademy.utils import decode_register, register_delta_time
 
 class IRegisterController(abc.ABC):
     @abstractmethod
+    def get_subject_by_id(self, subjects: list[Subject],
+                          subject_id: int) -> Subject | None:
+        pass
+
+    @abstractmethod
+    def get_student_by_id(self, students: list[Student],
+                          student_id: str) -> Student | None:
+        pass
+
+    @abstractmethod
+    def is_register_duplicated(self, registers: list[Register],
+                               student: Student, subject: Subject) -> bool:
+        pass
+
+    @abstractmethod
     def write_file(self, file_name: str, registers: list[Register]):
         pass
 
@@ -99,7 +114,8 @@ class RegisterController(IRegisterController):
 
     def add_register(self, reg_id: int, subject: Subject,
                      student: Student) -> Register:
-        pass
+        reg_time = datetime.datetime.now()
+        return Register(reg_id, student, subject, reg_time)
 
     def sort_by_register_time_asc(self, registers: list[Register]):
         registers.sort(key=lambda x: register_delta_time(x.register_time))
@@ -152,6 +168,28 @@ class RegisterController(IRegisterController):
 
     def update_register_id(self, student_id):
         Register.AUTO_ID = student_id + 1
+
+    def get_subject_by_id(self, subjects: list[Subject],
+                          subject_id: int) -> Subject | None:
+        for subject in subjects:
+            if subject.subject_id == subject_id:
+                return subject
+        return None
+
+    def get_student_by_id(self, students: list[Student],
+                          student_id: str) -> Student | None:
+        for student in students:
+            if student.student_id == student_id:
+                return student
+        return None
+
+    def is_register_duplicated(self, registers: list[Register],
+                               student: Student, subject: Subject) -> bool:
+        for reg in registers:
+            if reg.student.student_id == student.student_id and \
+                    reg.subject.subject_id == subject.subject_id:
+                return True
+        return False
 
 
 class RegisterJSONEncoder(json.JSONEncoder):

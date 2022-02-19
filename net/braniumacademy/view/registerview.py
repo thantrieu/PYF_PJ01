@@ -10,6 +10,12 @@ from net.braniumacademy.utils import *
 class RegisterView:
     def __init__(self, master):
         super().__init__()
+        self.img_register = None
+        self.img_cancel = None
+        self.btn_register = None
+        self.btn_cancel = None
+        self.combobox_subject_id = None
+        self.entry_student_id = None
         self.btn_statistic = None
         self.img_statistic = None
         self.img_chart = None
@@ -65,7 +71,7 @@ class RegisterView:
         # add buttons
         self.create_search_frame()
         self.create_sort_frame()
-        self.create_statistic_frame()
+        self.create_register_frame()
 
     def create_search_frame(self):
         self.search_var = tk.StringVar()
@@ -118,50 +124,68 @@ class RegisterView:
                         command=self.item_sort_by_student_id_selected). \
             grid(row=1, column=1, pady=4, padx=4, sticky=tk.W)
 
-    def create_statistic_frame(self):
-        frm_statistic = ttk.LabelFrame(self.frame, text='Thống kê')
+    def create_register_frame(self):
+        frm_add_new_register = ttk.LabelFrame(self.frame, text='Đăng ký môn học')
         # config set all columns have same width space
-        frm_statistic.columnconfigure(0, weight=1, uniform='fred')
-        frm_statistic.columnconfigure(1, weight=1, uniform='fred')
-        frm_statistic.rowconfigure(0, weight=1, uniform='fred')
-        frm_statistic.rowconfigure(1, weight=1, uniform='fred')
-        frm_statistic.rowconfigure(2, weight=1, uniform='fred')
-        frm_statistic.grid(row=1, column=2, sticky=tk.NSEW, pady=4, padx=4)
-        chart_icon_path = 'view/assets/chart.png'
-        stat_icon_path = 'view/assets/stat.png'
-        self.img_chart = tk.PhotoImage(file=chart_icon_path)
-        self.img_statistic = tk.PhotoImage(file=stat_icon_path)
-        self.btn_statistic = ttk.Button(frm_statistic, text='Thống kê',
-                                        image=self.img_statistic, compound=tk.LEFT,
-                                        command=self.btn_statistic_clicked, width=15)
-        self.btn_draw_chart = ttk.Button(frm_statistic, text='Vẽ biểu đồ',
-                                         image=self.img_chart, compound=tk.LEFT,
-                                         command=self.btn_draw_chart_clicked, width=15)
-        self.btn_statistic.grid(row=1, column=0, padx=4, pady=4)
-        self.btn_draw_chart.grid(row=1, column=1, padx=4, pady=4)
+        frm_add_new_register.columnconfigure(0, weight=1, uniform='fred')
+        frm_add_new_register.columnconfigure(1, weight=1, uniform='fred')
+        frm_add_new_register.rowconfigure(0, weight=1, uniform='fred')
+        frm_add_new_register.rowconfigure(1, weight=1, uniform='fred')
+        frm_add_new_register.rowconfigure(2, weight=1, uniform='fred')
+        frm_add_new_register.grid(row=1, column=2, sticky=tk.NSEW, pady=4, padx=4)
+        # add combobox, entry and button
+        self.entry_student_id = ttk.Entry(frm_add_new_register, width=15)
+        self.combobox_subject_id = ttk.Combobox(frm_add_new_register, width=12)
+        # add button
+        self.img_cancel = tk.PhotoImage(file='view/assets/remove.png')
+        self.btn_cancel = ttk.Button(frm_add_new_register, text='Hủy bỏ', width=15,
+                                     command=self.btn_cancel_clicked,
+                                     image=self.img_cancel, compound=tk.LEFT)
+        self.img_register = tk.PhotoImage(file='view/assets/add.png')
+        self.btn_register = ttk.Button(frm_add_new_register, text='Đăng ký', width=15,
+                                       command=self.btn_register_clicked,
+                                       image=self.img_register, compound=tk.LEFT)
+        # add label
+        ttk.Label(frm_add_new_register, text='Mã sinh viên:'). \
+            grid(row=0, column=0, padx=16, pady=4, sticky=tk.W)
+        ttk.Label(frm_add_new_register, text='Mã môn học:'). \
+            grid(row=1, column=0, padx=16, pady=4, sticky=tk.W)
+        # put into grid
+        self.entry_student_id.grid(row=0, column=1, pady=4, padx=16, sticky=tk.EW)
+        self.combobox_subject_id.grid(row=1, column=1, pady=4, padx=16, sticky=tk.EW)
+        self.btn_register.grid(row=2, column=1, pady=4, padx=16)
+        self.btn_cancel.grid(row=2, column=0, pady=4, padx=16)
 
     def create_buttons(self):
         button_frame = ttk.LabelFrame(self.frame, text='Các thao tác')
         button_frame.columnconfigure(0, weight=1, uniform='fred')
         button_frame.columnconfigure(1, weight=1, uniform='fred')
         button_frame.columnconfigure(2, weight=1, uniform='fred')
+        button_frame.columnconfigure(3, weight=1, uniform='fred')
         button_frame.grid(row=2, column=0, columnspan=3,
                           padx=4, pady=4, sticky=tk.NSEW)
         self.img_refresh = tk.PhotoImage(file='view/assets/refresh.png')
         self.btn_reload = ttk.Button(button_frame, text='Làm mới', width=20,
                                      command=self.load_data, image=self.img_refresh,
                                      compound=tk.LEFT)
-        self.btn_reload.grid(row=0, column=0, ipady=4, ipadx=4, pady=4, padx=4)
-        self.img_edit = tk.PhotoImage(file='view/assets/editing.png')
-        self.btn_edit = ttk.Button(button_frame, text='Sửa bản đăng ký', width=20,
-                                   command=self.btn_edit_subject_clicked,
-                                   image=self.img_edit, compound=tk.LEFT)
-        self.btn_edit.grid(row=0, column=1, ipady=4, ipadx=4, pady=4, padx=4)
+        self.btn_reload.grid(row=0, column=0, pady=4, padx=4)
         self.img_remove = tk.PhotoImage(file='view/assets/remove.png')
         self.btn_remove = ttk.Button(button_frame, text='Xóa bỏ', width=20,
                                      command=self.btn_remove_clicked,
                                      image=self.img_remove, compound=tk.LEFT)
-        self.btn_remove.grid(row=0, column=2, ipadx=4, ipady=4, pady=4, padx=4)
+        self.btn_remove.grid(row=0, column=1, pady=4, padx=4)
+        chart_icon_path = 'view/assets/chart.png'
+        stat_icon_path = 'view/assets/stat.png'
+        self.img_chart = tk.PhotoImage(file=chart_icon_path)
+        self.img_statistic = tk.PhotoImage(file=stat_icon_path)
+        self.btn_statistic = ttk.Button(button_frame, text='Thống kê',
+                                        image=self.img_statistic, compound=tk.LEFT,
+                                        command=self.btn_statistic_clicked, width=15)
+        self.btn_draw_chart = ttk.Button(button_frame, text='Vẽ biểu đồ',
+                                         image=self.img_chart, compound=tk.LEFT,
+                                         command=self.btn_draw_chart_clicked, width=15)
+        self.btn_statistic.grid(row=0, column=2, padx=4, pady=4)
+        self.btn_draw_chart.grid(row=0, column=3, padx=4, pady=4)
 
     def load_data(self, should_show=True):
         self.subjects.clear()
@@ -169,6 +193,9 @@ class RegisterView:
         if len(self.subjects) == 0:
             self.students = StudentController().read_file(STUDENT_FILE_NAME)
             self.subjects = SubjectController().read_file(SUBJECT_FILE_NAME)
+            # bind data to combobox that contain subject_id
+            subject_ids = get_subject_id(self.subjects)
+            self.combobox_subject_id.configure(values=subject_ids)
         self.registers = self.controller.read_file(REGISTER_FILE_NAME, self.students, self.subjects)
         if should_show:
             self.show_registers()
@@ -189,6 +216,32 @@ class RegisterView:
 
     def btn_statistic_clicked(self):
         pass
+
+    def btn_cancel_clicked(self):
+        self.entry_student_id.delete(0, 'end')
+        self.combobox_subject_id.delete(0, 'end')
+
+    def btn_register_clicked(self):
+        student_id = self.entry_student_id.get().upper()
+        subject_id_str = self.combobox_subject_id.get()
+        if student_id.strip() == '':
+            showerror('Student Id Error', 'Student id cannot be blank!')
+        elif subject_id_str == '':
+            showerror('Subject Id Error', 'Subject id cannot be empty!')
+        else:
+            subject_id = int(subject_id_str.strip())
+            subject = self.controller.get_subject_by_id(self.subjects, subject_id)
+            student = self.controller.get_student_by_id(self.students, student_id)
+            if student is None:
+                showerror('Student Id Invalid', 'Incorrect student id. Please check again.')
+            elif self.controller.is_register_duplicated(self.registers, student, subject):
+                showerror('Record Duplicated', 'This subject has been registered!')
+            else:
+                register = self.controller.add_register(0, subject, student)
+                self.registers.append(register)
+                self.show_registers()
+                message = f'Student id {student_id} registed subject id {subject_id} successfully!'
+                showinfo('Success', message)
 
     def btn_draw_chart_clicked(self):
         pass
@@ -281,3 +334,19 @@ class RegisterView:
             self.registers.clear()
             self.registers = result.copy()
             self.show_registers()
+
+    def btn_add_clicked(self):
+        # controller = SubjectController()
+        # try:
+        #     category = self.combobox_subject_id.get()
+        #     subject = controller.create_subject(0, name, credit, lesson, category)
+        #     self.master.create_subject(subject=subject)
+        #     showinfo('Action Success', message='Add new subject successfully!')
+        #     self.destroy()
+        # except SubjectLessonError as e:
+        #     showerror('SubjectLessonError', message=e.__str__())
+        #     self.destroy()
+        # except SubjectCreditError as e:
+        #     showerror('SubjectCreditError', message=e.__str__())
+        #     self.destroy()
+        pass
