@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter.messagebox import showerror, showinfo, askyesno
-
+import numpy as np
+import matplotlib.pyplot as plt
 from net.braniumacademy.controller.registercontroller import RegisterController
 from net.braniumacademy.controller.studentcontroller import StudentController
 from net.braniumacademy.controller.subjectcontroller import SubjectController
@@ -215,7 +216,8 @@ class RegisterView:
             index += 1
 
     def btn_statistic_clicked(self):
-        pass
+        pairs = self.controller.statistic(self.registers)
+        self.show_table(pairs)
 
     def btn_cancel_clicked(self):
         self.entry_student_id.delete(0, 'end')
@@ -244,7 +246,22 @@ class RegisterView:
                 showinfo('Success', message)
 
     def btn_draw_chart_clicked(self):
-        pass
+        pairs = self.controller.statistic(self.registers)
+        labels, data = self.controller.create_stat_data(pairs)
+        num_of_student = np.array(data)
+        colors = ['#94e368', '#9255e3', '#3b88f5', '#14cfff', '#f1ff14', '#ABEBC6',
+                  '#707B7C', '#14E4F1', '#1443F1', '#C8D2F7', '#F9F7A2', '#CEF9A2',
+                  '#80FA05', '#EFB9C4', '#EFB9E9', '#110E63']
+        explode = [0.0] * len(data)
+        explode[0] = 0.1
+        plt.pie(num_of_student, colors=colors, labels=labels, explode=explode,
+                shadow=True, startangle=30, autopct='%1.2f%%',
+                textprops={'color': '#ff0000'})
+        # set title
+        plt.title('Biểu đồ phân bố đăng ký môn học')
+        # add legend
+        plt.legend(loc='lower right', title='Mã môn học:', bbox_to_anchor=(1.25, 0))
+        plt.show()
 
     def btn_remove_clicked(self):
         registers = self.controller.read_file(REGISTER_FILE_NAME, self.students, self.subjects)
@@ -263,15 +280,6 @@ class RegisterView:
                 showinfo(title='Infomation', message=f'Delete register id "{register_id}" successfully!')
         else:
             showerror(title='Error', message='Please select a register to delete first!')
-
-    def btn_edit_subject_clicked(self):
-        item_selected = self.tbl_register.selection()
-        if len(item_selected) > 0:
-            index = int(item_selected[0])  # convert iid from str to int
-            # EditSubjectView(self, self.registers[index]).attributes('-topmost', True)
-        else:
-            showerror(title='Error', message='Please select a subject to edit first!')
-        pass
 
     def create_register(self, subject: Subject):
         self.registers.append(subject)
@@ -335,18 +343,5 @@ class RegisterView:
             self.registers = result.copy()
             self.show_registers()
 
-    def btn_add_clicked(self):
-        # controller = SubjectController()
-        # try:
-        #     category = self.combobox_subject_id.get()
-        #     subject = controller.create_subject(0, name, credit, lesson, category)
-        #     self.master.create_subject(subject=subject)
-        #     showinfo('Action Success', message='Add new subject successfully!')
-        #     self.destroy()
-        # except SubjectLessonError as e:
-        #     showerror('SubjectLessonError', message=e.__str__())
-        #     self.destroy()
-        # except SubjectCreditError as e:
-        #     showerror('SubjectCreditError', message=e.__str__())
-        #     self.destroy()
+    def show_table(self, pairs):
         pass

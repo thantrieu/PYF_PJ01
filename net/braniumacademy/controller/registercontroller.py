@@ -3,6 +3,7 @@ import datetime
 import json
 from abc import abstractmethod
 
+from net.braniumacademy.model.pair import Pair
 from net.braniumacademy.model.register import Register
 from net.braniumacademy.model.student import Student
 from net.braniumacademy.model.subject import Subject
@@ -23,6 +24,10 @@ class IRegisterController(abc.ABC):
     @abstractmethod
     def is_register_duplicated(self, registers: list[Register],
                                student: Student, subject: Subject) -> bool:
+        pass
+
+    @abstractmethod
+    def create_stat_data(self, pairs: list[Pair]) -> tuple:
         pass
 
     @abstractmethod
@@ -74,7 +79,7 @@ class IRegisterController(abc.ABC):
         pass
 
     @abstractmethod
-    def statistic(self):
+    def statistic(self, registers: list[Register]) -> list[Pair | Pair, ...]:
         pass
 
     @abstractmethod
@@ -145,8 +150,17 @@ class RegisterController(IRegisterController):
                 result.append(reg)
         return result
 
-    def statistic(self):
-        pass
+    def statistic(self, registers: list[Register]) -> list[Pair | Pair, ...]:
+        result = []
+        for reg in registers:
+            is_existed = False
+            for pair in result:
+                if pair.subject.subject_id == reg.subject.subject_id:
+                    pair.number_of_register += 1
+                    is_existed = True
+            if is_existed is False:
+                result.append(Pair(reg.subject, 0))
+        return result
 
     def write_file(self, file_name: str, registers: list[Register]):
         with open(file_name, 'w', encoding='UTF-8') as writer:
@@ -190,6 +204,14 @@ class RegisterController(IRegisterController):
                     reg.subject.subject_id == subject.subject_id:
                 return True
         return False
+
+    def create_stat_data(self, pairs: list[Pair]) -> tuple:
+        labels = []
+        data = []
+        for pair in pairs:
+            labels.append(pair.subject.subject_id)
+            data.append(pair.number_of_register)
+        return labels, data
 
 
 class RegisterJSONEncoder(json.JSONEncoder):
