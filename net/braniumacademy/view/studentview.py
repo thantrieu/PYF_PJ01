@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import tkinter as tk
-from tkinter import ttk
 from tkinter.messagebox import showerror, askyesno, showinfo
 from net.braniumacademy.utils import *
 from net.braniumacademy.controller.studentcontroller import StudentController
