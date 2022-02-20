@@ -344,4 +344,46 @@ class RegisterView:
             self.show_registers()
 
     def show_table(self, pairs):
-        pass
+        frm_stat = tk.Tk()
+        frm_stat.title('Statistic Student Register Window')
+        frm_stat.resizable(False, False)
+        ttk.Button(text='OK', master=frm_stat, command=frm_stat.destroy). \
+            grid(row=1, column=0, padx=16, pady=4, sticky=tk.EW)
+        columns = ('row_number', 'subject_id', 'subject_name', 'number_register')
+        tbl_stat = ttk.Treeview(frm_stat, columns=columns, show='headings', height=10)
+        tbl_stat.grid(row=0, column=0, sticky=tk.EW, pady=4, padx=4)
+        # set style
+        set_style(tbl_stat, theme='default')
+        # show heading
+        tbl_stat.heading('row_number', text='STT')
+        tbl_stat.heading('subject_id', text='Mã môn học')
+        tbl_stat.heading('subject_name', text='Tên môn học')
+        tbl_stat.heading('number_register', text='Số lượng đăng ký')
+        # config columns
+        tbl_stat.column(0, stretch=tk.NO, width=100, anchor=tk.CENTER)
+        tbl_stat.column(1, stretch=tk.NO, width=100, anchor=tk.CENTER)
+        tbl_stat.column(2, stretch=tk.NO, width=160, anchor=tk.W)
+        tbl_stat.column(3, stretch=tk.NO, width=100, anchor=tk.CENTER)
+        # add scrollbar
+        scrollbar = ttk.Scrollbar(self.frame, orient=tk.VERTICAL,
+                                  command=tbl_stat.yview)
+        scrollbar.grid(row=0, column=3, sticky=tk.NS)
+        tbl_stat['yscrollcommand'] = scrollbar.set
+        # add data
+        _fill_stat_data(tbl_stat, pairs)
+        frm_stat.mainloop()
+
+
+def _fill_stat_data(tbl, pairs):
+    clear_treeview(tbl)
+    index = 1
+    tbl.selection_clear()
+    for pair in pairs:
+        if index % 2 == 0:
+            tag = 'even'
+        else:
+            tag = 'odd'
+        row_data = (index, pair.subject.subject_id, pair.subject.subject_name, pair.number_of_register)
+        tbl.insert('', tk.END, values=row_data,
+                   tags=(tag,), iid=f'{index - 1}')
+        index += 1

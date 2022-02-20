@@ -232,5 +232,29 @@
     "subject_id": 1011,
     "student_id": "SV1009",
     "reg_time": "20/02/2022 00:18:03"
+  },
+  {
+    "reg_id": 1040,
+    "subject_id": 1002,
+    "student_id": "SV1010",
+    "reg_time": "20/02/2022 10:39:40"
+  },
+  {
+    "reg_id": 1041,
+    "subject_id": 1002,
+    "student_id": "SV1011",
+    "reg_time": "20/02/2022 10:39:44"
+  },
+  {
+    "reg_id": 1042,
+    "subject_id": 1003,
+    "student_id": "SV1011",
+    "reg_time": "20/02/2022 10:39:49"
+  },
+  {
+    "reg_id": 1043,
+    "subject_id": 1001,
+    "student_id": "SV1011",
+    "reg_time": "20/02/2022 10:40:11"
   }
 ]
