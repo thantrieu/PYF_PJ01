@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, Menu
 from tkinter.messagebox import showinfo
 
+from net.braniumacademy.utils import set_style
 from net.braniumacademy.view.addnewstudentview import AddNewStudentView
 from net.braniumacademy.view.registerview import RegisterView
 from net.braniumacademy.view.studentview import StudentView
@@ -11,6 +12,7 @@ from net.braniumacademy.view.subjectview import SubjectView, AddNewSubjectView
 class HomeView(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.notebook = None
         self.register_view = None
         self.subject_view = None
         self.student_view = None
@@ -29,30 +31,30 @@ class HomeView(tk.Tk):
         self.create_menu()
 
     def create_notebook(self):
-        notebook = ttk.Notebook()
-        notebook.grid(row=0, column=0, sticky=tk.NSEW)
+        self.notebook = ttk.Notebook()
+        self.notebook.grid(row=0, column=0, sticky=tk.NSEW)
         # add student frame
-        self.frm_student = ttk.Frame(notebook)
+        self.frm_student = ttk.Frame(self.notebook)
         # cấu hình cho các cột của frame có cùng độ rộng
         self.frm_student.columnconfigure(0, weight=1, uniform='fred')
         self.frm_student.columnconfigure(1, weight=1, uniform='fred')
         self.frm_student.columnconfigure(2, weight=1, uniform='fred')
         self.frm_student.grid(row=0, column=0)
         # add subject frame
-        self.frm_subject = ttk.Frame(notebook)
+        self.frm_subject = ttk.Frame(self.notebook)
         self.frm_subject.columnconfigure(0, weight=1, uniform='fred')
         self.frm_subject.columnconfigure(1, weight=1, uniform='fred')
         self.frm_subject.grid(row=0, column=0)
         # add register frame
-        self.frm_register = ttk.Frame(notebook)
+        self.frm_register = ttk.Frame(self.notebook)
         self.frm_register.columnconfigure(0, weight=1, uniform='fred')
         self.frm_register.columnconfigure(1, weight=1, uniform='fred')
         self.frm_register.columnconfigure(2, weight=1, uniform='fred')
         self.frm_register.grid(row=0, column=0)
-        # add frame to notebook
-        notebook.add(self.frm_student, text='Student Managerment')
-        notebook.add(self.frm_subject, text='Subject Managerment')
-        notebook.add(self.frm_register, text='Register Managerment')
+        # add frame to self.notebook
+        self.notebook.add(self.frm_student, text='Student Managerment')
+        self.notebook.add(self.frm_subject, text='Subject Managerment')
+        self.notebook.add(self.frm_register, text='Register Managerment')
 
     def create_menu(self):
         file_menu = Menu(self.menubar, tearoff=False)
@@ -73,7 +75,14 @@ class HomeView(tk.Tk):
         # add to menu bar
         self.menubar.add_cascade(label='File', menu=file_menu, underline=0)
         self.menubar.add_cascade(label='Help', underline=0)
-        self.menubar.add_cascade(label='Settings', underline=0)
+        sub_menu_setting = Menu(tearoff=False)
+        sub_menu_theme = Menu(tearoff=False)
+        sub_menu_theme.add_command(label='Default', command=lambda: self.change_theme('default'))
+        sub_menu_theme.add_command(label='Alt', command=lambda: self.change_theme('alt'))
+        sub_menu_theme.add_command(label='Clam', command=lambda: self.change_theme('clam'))
+        sub_menu_theme.add_command(label='Classic', command=lambda: self.change_theme('classic'))
+        sub_menu_setting.add_cascade(label='Themes', menu=sub_menu_theme)
+        self.menubar.add_cascade(label='Settings', menu=sub_menu_setting, underline=0)
 
     def create_child_views(self):
         self.student_view = StudentView(self.frm_student)
@@ -97,4 +106,10 @@ class HomeView(tk.Tk):
         popup.mainloop()
 
     def create_register(self):
-        pass
+        self.notebook.select(2)
+        self.register_view.entry_student_id.focus()
+
+    def change_theme(self, theme: str):
+        set_style(self.register_view.tbl_register, theme)
+        set_style(self.student_view.tbl_student, theme)
+        set_style(self.subject_view.tbl_subject, theme)

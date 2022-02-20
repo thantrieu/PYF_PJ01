@@ -255,7 +255,7 @@ class RegisterView:
         explode = [0.0] * len(data)
         explode[0] = 0.1
         plt.pie(num_of_student, colors=colors, labels=labels, explode=explode,
-                shadow=True, startangle=30, autopct='%1.2f%%',
+                shadow=True, startangle=30, autopct='%1.1f%%',
                 textprops={'color': '#ff0000'})
         # set title
         plt.title('Biểu đồ phân bố đăng ký môn học')
