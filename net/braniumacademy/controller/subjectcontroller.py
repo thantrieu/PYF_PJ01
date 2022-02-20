@@ -28,7 +28,7 @@ class ISubjectController(abc.ABC):
         pass
 
     @abstractmethod
-    def write_file(self, file_name: str, subject: list[Subject]):
+    def write_file(self, file_name: str, subjects: list[Subject]):
         pass
 
     @abstractmethod
@@ -157,9 +157,9 @@ class SubjectController(ISubjectController):
         self.update_subject_id(subjects[len(subjects) - 1].subject_id)
         return subjects
 
-    def write_file(self, file_name: str, subject: list[Subject]):
+    def write_file(self, file_name: str, subjects: list[Subject]):
         with open(file_name, 'w', encoding='UTF-8') as writer:
-            encoded_data = json.dumps(subject, cls=SubjectJSONEncoder,
+            encoded_data = json.dumps(subjects, cls=SubjectJSONEncoder,
                                       indent=2, ensure_ascii=False)
             writer.write(encoded_data)
 

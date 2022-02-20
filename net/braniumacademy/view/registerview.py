@@ -281,10 +281,6 @@ class RegisterView:
         else:
             showerror(title='Error', message='Please select a register to delete first!')
 
-    def create_register(self, subject: Subject):
-        self.registers.append(subject)
-        self.show_registers()
-
     def item_save_selected(self):
         self.controller.write_file(REGISTER_FILE_NAME, self.registers)
 
